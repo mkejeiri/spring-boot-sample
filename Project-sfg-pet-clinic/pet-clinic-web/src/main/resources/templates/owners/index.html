@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+	integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css"
+	integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ"
+	crossorigin="anonymous">
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+	integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+	crossorigin="anonymous"></script>
 <head>
 <meta charset="UTF-8">
 <title>List of Owners</title>
 </head>
 <body>
+<!-- tells IntelliJ that owner is type of Owner, to be able to use IntelliSense -->
+<!-- /*@thymesVar id="owner" type="com.mkejeiri.sfgpetclinic.model.Owner" */-->
 	<h1 th:text="'List of Owners'">List of Owners...</h1>
+	<table class="table table-striped">
+		<tr>
+			<th>ID</th>
+			<th>Last Name</th>
+			<th>First Name</th>
+		</tr>
+		<tr th:each="owner: ${owners}">
+			<td th:text="${owner?.id}" />
+			<td th:text="${owner?.firstName}" />
+			<td th:text="${owner?.lastName}" />
+		</tr>
+	</table>
 </body>
 </html>
