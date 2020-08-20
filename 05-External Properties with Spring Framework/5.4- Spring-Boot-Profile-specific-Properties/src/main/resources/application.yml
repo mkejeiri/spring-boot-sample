@@ -1,0 +1,28 @@
+#need to have a different property otherwise they overrides silently each other depending on the hierarchy
+#out of the box spring parses application.properties and application.yml and bring the values as properties to spring context.
+# see https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/html/boot-features-external-config.html
+#https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
+mkejeiri:
+  jms:
+    username: jms-username
+    password: jms-Paw0rd
+    dburl: jms-url
+
+#indicate a file separator
+#application-de.properties (application-{profile}.properties) take precedence over next YAML comming next!
+#but next YAML take precedence over application-de.properties
+--- 
+spring:
+  profiles: de
+mkejeiri:
+  jms:
+    username: jms-username-profile-de-yml
+    password: jms-Paw0rd-de-profile-de-yml 
+    
+    
+    
+#Output
+#Hello!!! 
+#Primärer Grußdienst
+#FakeDataSource [username=mkejeiri, password=Paw0rd, url=SqlDbUrl]
+#FakeJmsBroker [username=jms-username-IN-GERMAN, password=jms-Paw0rd-de-profile-de-yml, url=jms-url]

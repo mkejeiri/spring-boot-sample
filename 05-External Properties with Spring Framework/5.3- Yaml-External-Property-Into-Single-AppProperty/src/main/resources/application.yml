@@ -1,0 +1,9 @@
+#need to have a different property otherwise they overrides silently each other depending on the hierarchy
+#out of the box spring parses application.properties and application.yml and bring the values as properties to spring context.
+# see https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/html/boot-features-external-config.html
+#https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
+mkejeiri:
+  jms:
+    username: jms-username
+    password: jms-Paw0rd
+    dburl: jms-url

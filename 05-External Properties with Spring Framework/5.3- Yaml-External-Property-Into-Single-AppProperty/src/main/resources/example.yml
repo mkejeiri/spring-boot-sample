@@ -1,0 +1,43 @@
+#here we choose indentation 3 characters at each level!
+# this a comment
+name: Mohamed
+
+#list
+names:
+   - Luc
+   - Rudy
+   - Django
+
+
+#spec char
+pound_sign: "#"
+
+#complex type
+book:
+   author: Joe Doe
+   publisher: house of cards
+
+   
+# boolean
+truth: yes
+anothor_truth: True
+more_true: true
+false: no #No, false, FALSE
+
+
+#string with spec char
+string_val: "this is it's quote"
+
+colon_string: "hibbies: cinema, horses, sport"
+ 
+include_new_lines: | 
+   first line
+   second line
+   third line
+   
+ignore_new_lines: >
+   this is 
+   just one
+   long 
+   string
+  
