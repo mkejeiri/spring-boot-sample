@@ -1,9 +1,13 @@
 package com.mkejeiri.sfgpetclinic.bootstrap;
 
+import java.time.LocalDate;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.mkejeiri.sfgpetclinic.model.Owner;
+import com.mkejeiri.sfgpetclinic.model.Pet;
 import com.mkejeiri.sfgpetclinic.model.PetType;
 import com.mkejeiri.sfgpetclinic.model.Vet;
 import com.mkejeiri.sfgpetclinic.services.OwnerService;
@@ -32,15 +36,21 @@ public class DataLoader implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		var owner = new Owner();		
-		owner.setFirstName("John");
-		owner.setLastName("Doe");
-		ownerService.save(owner);
+		var john = new Owner();		
+		john.setFirstName("John");
+		john.setLastName("Doe");
+		john.setAddress("winer Road, 30");
+		john.setCity("New york city");
+		john.setTelephone("+1227544878");
+		ownerService.save(john);
 
-		owner = new Owner();
-		owner.setFirstName("Sarah");
-		owner.setLastName("Coroner");
-		ownerService.save(owner);
+		var sarah = new Owner();
+		sarah.setFirstName("Sarah");
+		sarah.setLastName("Coroner");
+		sarah.setAddress("Loser Road, 30");
+		sarah.setCity("Atlanta city");
+		sarah.setTelephone("+1221557877");
+		ownerService.save(sarah);
 
 		System.out.println("Loaded Owners...");
 
@@ -56,11 +66,29 @@ public class DataLoader implements CommandLineRunner {
 		
 		var petType = new PetType();
 		petType.setName("cat");		
-		var savedPetType = petTypeService.save(petType);
+		var savedCatType = petTypeService.save(petType);
 		
 		petType = new PetType();
 		petType.setName("dog");
-		savedPetType =petTypeService.save(petType);
+		var savedDogType =petTypeService.save(petType);
+		
+		Pet mikesPet = new Pet();
+		mikesPet.setPetType(savedDogType);
+		mikesPet.setOwner(john);
+		mikesPet.setBirthDate(LocalDate.now());		
+		mikesPet.setName("Rosco");
+		john.getPets().add(mikesPet);
+		
+		
+		Pet sarahPet = new Pet();
+		sarahPet.setPetType(savedCatType);
+		sarahPet.setOwner(sarah);
+		sarahPet.setName("moeu")	;
+		sarahPet.setBirthDate(LocalDate.now());
+		sarahPet.getOwner().getPets().add(sarahPet);
+		
+		
+		
 
 		System.out.println("Loaded Vets...");
 	}
