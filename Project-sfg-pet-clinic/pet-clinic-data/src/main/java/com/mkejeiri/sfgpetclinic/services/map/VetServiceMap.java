@@ -5,9 +5,15 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.mkejeiri.sfgpetclinic.model.Vet;
+import com.mkejeiri.sfgpetclinic.services.SpecialityService;
 import com.mkejeiri.sfgpetclinic.services.VetService;
 @Service
 public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
+
+	private final SpecialityService specialityService;
+	public VetServiceMap(SpecialityService specialityService) {
+		this.specialityService = specialityService;
+	}
 
 	@Override
 	public Vet findById(Long id) {
@@ -17,6 +23,14 @@ public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetS
 	@Override
 	public Vet save(Vet vet) {
 
+		if (vet.getSpecialities() != null) {
+			vet.getSpecialities().forEach(speciality -> {
+				if (speciality.getId() == null) {
+					speciality.setId(specialityService.save(speciality).getId());
+				}					
+			});
+		}
+		
 		return super.save(vet);
 	}
 
