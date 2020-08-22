@@ -15,11 +15,11 @@ import com.mkejeiri.sfgpetclinic.services.PetTypeService;
 //upon startup, using packages component scan from top to bottom,
 //by default the top package is where the class annotated with @SpringBootApplication reside, if any service reside outside that tree we need to use
 //explicitly ComponentScan on the class annotated with @SpringBootApplication.
-public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 	private final PetService petService;
 	private final PetTypeService petTypeService;
 
-	public OwnerServiceMap(PetService petService, PetTypeService petTypeService) {
+	public OwnerMapService(PetService petService, PetTypeService petTypeService) {
 		this.petService = petService;
 		this.petTypeService = petTypeService;
 	}
