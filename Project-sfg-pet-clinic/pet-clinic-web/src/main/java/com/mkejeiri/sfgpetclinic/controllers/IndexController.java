@@ -10,5 +10,10 @@ public class IndexController {
 	public String index() {
 		return "index"; // index view
 	}
+	
+	@RequestMapping({"/oups"})
+	public String oupsHandler() {
+		return "notimplemented"; // notimplemented view
+	}
 
 }
