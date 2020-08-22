@@ -15,6 +15,7 @@ public class Pet extends BaseEntity {
 	@Column(name = "name")
 	private String name;
 	
+	//a pet is classified by a unique pet type 
 	@ManyToOne //this is an FK of the reference table (types) of PetType
 	@JoinColumn(name = "pet_type_id")
 	private PetType petType;
