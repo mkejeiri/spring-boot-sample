@@ -2,10 +2,10 @@ package com.mkejeiri.sfgpetclinic.services.map;
 
 import java.util.Set;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.mkejeiri.sfgpetclinic.model.Owner;
-import com.mkejeiri.sfgpetclinic.model.Pet;
 import com.mkejeiri.sfgpetclinic.services.OwnerService;
 import com.mkejeiri.sfgpetclinic.services.PetService;
 import com.mkejeiri.sfgpetclinic.services.PetTypeService;
@@ -15,6 +15,7 @@ import com.mkejeiri.sfgpetclinic.services.PetTypeService;
 //upon startup, using packages component scan from top to bottom,
 //by default the top package is where the class annotated with @SpringBootApplication reside, if any service reside outside that tree we need to use
 //explicitly ComponentScan on the class annotated with @SpringBootApplication.
+@Profile({"default","map"})
 public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 	private final PetService petService;
 	private final PetTypeService petTypeService;
