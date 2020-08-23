@@ -71,6 +71,13 @@ public class DataLoader implements CommandLineRunner {
 		john.setCity("New york city");
 		john.setTelephone("+1227544878");
 		ownerService.save(john);
+		
+		
+		//OR use Builder thanks to lombok annotations : @Setter,@Getter,@NoArgsConstructor, @AllArgsConstructor,@Builder		
+//		var owner = Owner.builder().firstName("John").lastName("Doe")
+//				.address("winer Road, 30").telephone("+1227544878")
+//				.city("New york city").build();//
+// 		ownerService.save(owner);		
 
 		var sarah = new Owner();
 		sarah.setFirstName("Sarah");
