@@ -1,3 +1,36 @@
 #Show autoconfiguration
 mvn spring-boot:help -Ddetail=true
 mvn spring-boot:run -Drun.arguments=--debug
+
+#Lombok installation
+download lombok.jar into eclipse installation folder
+click on lombok.jar and install it
+check the -javaagent:C:\Users\Funy\eclipse\jee-2020-062\eclipse\lombok.jar in eclipse.ini
+add lombok.jar to the project : click on project properties and "Java Build Path" Add External Jar" to module path
+restart eclipce 
+
+Add dependency and plugin in the POM:
+		....
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		
+		...
+
+		<plugin>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven-plugin</artifactId>
+            <configuration>
+                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                <addOutputDirectory>>false</addOutputDirectory>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>delombok</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
