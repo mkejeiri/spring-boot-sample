@@ -9,7 +9,7 @@ import com.mkejeiri.sfgpetclinic.model.Speciality;
 import com.mkejeiri.sfgpetclinic.services.SpecialityService;
 
 @Service
-public class SpecialtiesMapService  extends AbstractMapService<Speciality, Long> implements SpecialityService {
+public class SpecialityMapService  extends AbstractMapService<Speciality, Long> implements SpecialityService {
 	@Override
 	public Speciality findById(Long id) {
 		return super.findById(id);
