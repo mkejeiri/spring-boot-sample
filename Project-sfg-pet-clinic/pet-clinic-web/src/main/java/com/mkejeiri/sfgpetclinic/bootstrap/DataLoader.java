@@ -70,14 +70,14 @@ public class DataLoader implements CommandLineRunner {
 		john.setAddress("winer Road, 30");
 		john.setCity("New york city");
 		john.setTelephone("+1227544878");
-		ownerService.save(john);
-		
-		
-		//OR use Builder thanks to lombok annotations : @Setter,@Getter,@NoArgsConstructor, @AllArgsConstructor,@Builder		
-//		var owner = Owner.builder().firstName("John").lastName("Doe")
+		ownerService.save(john);		
+//		//OR use Builder thanks to lombok annotations : @Setter,@Getter,@NoArgsConstructor, @AllArgsConstructor,@Builder		
+//		var owner = Owner.builder().firstName("John from builder").lastName("Doe from builder")
 //				.address("winer Road, 30").telephone("+1227544878")
 //				.city("New york city").build();//
-// 		ownerService.save(owner);		
+// 		ownerService.save(owner);
+ 		
+ 		
 
 		var sarah = new Owner();
 		sarah.setFirstName("Sarah");
