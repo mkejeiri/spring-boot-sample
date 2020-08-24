@@ -34,3 +34,4 @@ Add dependency and plugin in the POM:
                 </execution>
             </executions>
         </plugin>
+		

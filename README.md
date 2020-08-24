@@ -6,6 +6,10 @@
 - 05- (External Properties with Spring Framework)[https://docs.spring.io/spring-boot/docs/2.1.9.RELEASE/reference/html/boot-features-external-config.html]: property source, spring Environment variables, multiple property files, application.yml properties, overriding properties by using profile specific application property (YAML) which has more precedence over file which doesn't have profile...
 - 06-spring-mvc-recipe : JPA Data Modeling with Spring and Hibernate
 - 07-lombok-recipe: spring-mvc-recipe refactored into a project lombok spring-mvc.
+- 08-Unit-Integration-Test-recipe: unit and integration test with junit4 : 
+> Unit and Integration test consideration : *maven-surefire-plugin* run the test by default (the unit test), but *maven-failsafe-plugin* will run the integration test, see pom.xml where we explicitly inlude everything ending with *IT.java*. in addition, *additionalClasspathElements* is there because the spring team made a change in the ClassPath and now spring boot JAR laid out and it broke the *maven-failsafe-plugin*, therefore we need to include this, otherwise we will get an error saying : *maven  that is unable to find classes*.   
+
+
 
 ------------------
 # Project
