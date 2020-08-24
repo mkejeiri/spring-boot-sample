@@ -15,7 +15,7 @@ import com.mkejeiri.sfgpetclinic.services.PetTypeService;
 //upon startup, using packages component scan from top to bottom,
 //by default the top package is where the class annotated with @SpringBootApplication reside, if any service reside outside that tree we need to use
 //explicitly ComponentScan on the class annotated with @SpringBootApplication.
-@Profile({"default","map"})
+@Profile({ "default", "map" })
 public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 	private final PetService petService;
 	private final PetTypeService petTypeService;
@@ -44,7 +44,7 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
 						throw new RuntimeException("Pet Type is required");
 					if (pet.getId() == null) {
 						pet.setId(petService.save(pet).getId());
-					}					
+					}
 				});
 			}
 
@@ -73,8 +73,10 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
 
 	@Override
 	public Owner findByLastName(String lastName) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.findAll()
+				.stream()
+				.filter(owner -> lastName.equalsIgnoreCase(owner.getLastName()))
+				.findFirst()
+				.orElse(null);
 	}
-
 }
