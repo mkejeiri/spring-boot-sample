@@ -17,7 +17,7 @@ public class OwnerController {
 	}
 
 	@RequestMapping({"", "/", "/index", "/index.html"})
-	public String listVets(Model model) {
+	public String ListOwners(Model model) {
 		
 		var owners = ownerService.findAll();
 		model.addAttribute("owners",owners);
@@ -28,10 +28,9 @@ public class OwnerController {
 	@RequestMapping({"/find"})
 	public String findOwners(Model model) {
 		
-		var owners = ownerService.findAll();
-		model.addAttribute("owners",owners);
+//		var owners = ownerService.findAll();
+//		model.addAttribute("owners", owners);
 		return "notimplemented";
-	}
+	}	
 	
-	//
 }
