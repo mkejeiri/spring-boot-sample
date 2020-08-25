@@ -35,3 +35,5 @@ Add dependency and plugin in the POM:
             </executions>
         </plugin>
 		
+
+ mvn clean install -DskipTests

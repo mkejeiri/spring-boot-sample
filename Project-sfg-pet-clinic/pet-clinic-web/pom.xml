@@ -65,12 +65,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
+<!-- 			<exclusions> -->
+<!-- 	<exclusion> -->
+<!-- 		<groupId>org.junit.vintage</groupId> -->
+<!-- 		<artifactId>junit-vintage-engine</artifactId> -->
+<!-- 	</exclusion> -->
+<!-- </exclusions> -->
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -97,15 +97,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+				<configuration>
+					<argLine>-Dfile.encoding=UTF-8 -Xms1024m -Xmx1024m
+						-XX:PermSize=1024m -noverify</argLine>
+					<!-- <skipTests>true</skipTests> -->
+					<forkedProcessExitTimeoutInSeconds>120</forkedProcessExitTimeoutInSeconds>
+					<testFailureIgnore>true</testFailureIgnore>
+				</configuration>
 				<!-- <version>2.19.1</version> -->
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>1.3.2</version>
-						<scope>compile</scope>
-					</dependency>
-				</dependencies>
+				<!-- <dependencies> -->
+				<!-- <dependency> -->
+				<!-- <groupId>org.junit.platform</groupId> -->
+				<!-- <artifactId>junit-platform-surefire-provider</artifactId> -->
+				<!-- <version>1.3.2</version> -->
+				<!-- <scope>compile</scope> -->
+				<!-- </dependency> -->
+				<!-- </dependencies> -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
