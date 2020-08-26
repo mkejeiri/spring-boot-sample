@@ -26,6 +26,7 @@
 									<tr>
 										<th>ID</th>
 										<th>Description</th>
+										<th>View</th>
 									</tr>
 								</thead>
 								<!--                             removed at runtime, but natural template in browser allow us to see how it looks -->
@@ -42,6 +43,7 @@
 								<tr th:each="recipe : ${recipes}">
 									<td th:text="${recipe.id}">334</td>
 									<td th:text="${recipe.description}">Tasty Goodnees 3</td>
+									<td><a th:href="@{'recipe/show/'+ ${recipe.id}}" th:text="view"></a></td>
 								</tr>
 							</table>
 						</div>

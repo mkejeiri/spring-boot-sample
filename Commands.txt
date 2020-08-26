@@ -37,3 +37,7 @@ Add dependency and plugin in the POM:
 		
 
  mvn clean install -DskipTests
+ 
+ # get resource from https://www.webjars.org/
+ Bootstrap + Jquery
+ 

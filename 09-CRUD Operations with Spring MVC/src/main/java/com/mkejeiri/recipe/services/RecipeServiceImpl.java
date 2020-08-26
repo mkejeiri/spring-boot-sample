@@ -12,7 +12,7 @@ import com.mkejeiri.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 
 //@Slf4j: this inject a logger, it is the logging facade which gives access to the default Spring Boot logger which is the logback
-@Slf4j //  using logging from lombok, we get a log property (see Outline)
+@Slf4j // using logging from lombok, we getsees a log property (see Outline)
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -28,6 +28,27 @@ public class RecipeServiceImpl implements RecipeService {
 		var recipes = new HashSet<Recipe>();
 		recipeRepository.findAll().iterator().forEachRemaining(recipes::add); // Java 8 Syntax!
 		return recipes;
+	}	
+	
+	@Override
+	public Recipe findById(Long id) {
+		return recipeRepository.findById(id).orElseGet(null);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		recipeRepository.deleteById(id);
+	}
+
+	@Override
+	public void delete(Recipe recipe) {
+		recipeRepository.delete(recipe);
+
+	}
+
+	@Override
+	public Recipe save(Recipe recipe) {
+		return recipeRepository.save(recipe);
 	}
 
 }

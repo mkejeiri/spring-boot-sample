@@ -1,8 +1,10 @@
 package com.mkejeiri.recipe.controllers;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mkejeiri.recipe.services.RecipeService;
 import com.mkejeiri.recipe.services.RecipeServiceImpl;
@@ -29,7 +31,7 @@ public class IndexController {
 //		this.categoryRepository = categoryRepository;
 //	}
 
-	@RequestMapping({"","/","/index","/index.html"})
+	@RequestMapping(value = {"","/","/index","/index.html"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
 	public String getIndexPage(Model model) {
 		log.debug("Getting Index Page...");
 		
@@ -40,4 +42,16 @@ public class IndexController {
 //		System.out.println("some messsage to see");
 		return "index";
 	}
+	
+//	@RequestMapping(value = {"","/","/index","/index.html"}, method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+//	public String viewRecipe(Model model) {
+//		log.debug("Getting Index Page...");
+//		
+////		System.out.println(categoryRepository.findByDescription("American"));
+////		System.out.println(unitOfMeasureRepository.findByDescription("Teaspoon"));
+//		
+//		model.addAttribute("recipe",recipeService.getRecipes());
+////		System.out.println("some messsage to see");
+//		return "index";
+//	}
 }
