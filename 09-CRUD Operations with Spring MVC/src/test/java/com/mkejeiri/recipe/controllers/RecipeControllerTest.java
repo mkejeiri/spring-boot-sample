@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mkejeiri.recipe.domain.Recipe;
 import com.mkejeiri.recipe.services.RecipeService;
@@ -45,7 +46,8 @@ class RecipeControllerTest {
 		when(recipeService.findById(anyLong())).thenReturn(recipe);
 		mockMvc.perform(get("/recipe/show/" + ID))
 		.andExpect(status().isOk())
-		.andExpect(view().name("recipe/show"));
+		.andExpect(view().name("recipe/show"))
+		.andExpect(model().attributeExists("recipe"));
 	}
 
 }
