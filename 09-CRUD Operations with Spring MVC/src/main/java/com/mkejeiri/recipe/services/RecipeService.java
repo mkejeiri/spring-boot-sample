@@ -2,6 +2,7 @@ package com.mkejeiri.recipe.services;
 
 import java.util.Set;
 
+import com.mkejeiri.recipe.command.RecipeCommand;
 import com.mkejeiri.recipe.domain.Recipe;
 
 public interface RecipeService {
@@ -14,4 +15,6 @@ public interface RecipeService {
 	public void delete(Recipe recipe);
 
 	public Recipe save(Recipe recipe);
+	
+	RecipeCommand saveRecipeCommand(RecipeCommand command);
 }
