@@ -3,13 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <title>Recipe Home</title>
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.2/css/bootstrap.min.css}">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+	crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/4.5.2/css/bootstrap.min.css}">
+
 <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+	crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
 
 </head>
 <body>
-
+<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
 	<div class="container-fluid" style="margin-top: 20px">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
@@ -24,9 +34,11 @@
 							<table class="table table-hover ">
 								<thead class="thead-inverse">
 									<tr>
-										<th>ID</th>
-										<th>Description</th>
-										<th>View</th>
+										  <th>ID</th>
+                                <th>Description</th>
+                                <th>View</th>
+                                <th>Update</th>
+                                <th>Delete</th>
 									</tr>
 								</thead>
 								<!--                             removed at runtime, but natural template in browser allow us to see how it looks -->
@@ -43,7 +55,9 @@
 								<tr th:each="recipe : ${recipes}">
 									<td th:text="${recipe.id}">334</td>
 									<td th:text="${recipe.description}">Tasty Goodnees 3</td>
-									<td><a th:href="@{'recipe/show/'+ ${recipe.id}}" th:text="view"></a></td>
+									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
+									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
+									<td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
 								</tr>
 							</table>
 						</div>

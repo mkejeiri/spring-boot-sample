@@ -51,7 +51,7 @@ public class RecipeServiceImplTest {
 //	}
 
 	@Test
-	public final void testGetRecipes() {
+	public final void testGetRecipes()  throws Exception{
 		// fail("Not yet implemented");
 
 		// Set up data
@@ -68,7 +68,7 @@ public class RecipeServiceImplTest {
 	}
 
 	@Test
-	final void testFindById() {
+	final void testFindById()  throws Exception{
 		
 		Recipe recipe = new Recipe();
 		recipe.setId(ID);
@@ -85,10 +85,18 @@ public class RecipeServiceImplTest {
 
 	}
 
-//	@Test
-//	final void testDeleteById() {
-//		fail("Not yet implemented"); // TODO
-//	}
+	@Test
+	final void testDeleteById() throws Exception{
+		
+		//given
+		Long idToDelete = 2L;
+		recipeService.deleteById(idToDelete);
+		
+		//!!!!NO when : it a void, doesn't return a value
+		
+		//then
+		verify(recipeRepository, times(1)).deleteById(anyLong());		
+	}
 //
 //	@Test
 //	final void testDelete() {

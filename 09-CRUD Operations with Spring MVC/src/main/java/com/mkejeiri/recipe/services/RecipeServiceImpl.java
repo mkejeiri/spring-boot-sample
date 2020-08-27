@@ -61,8 +61,10 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	@Transactional //enforce the spring JPA to start of a transaction in case of 
-	//any lazy loading occurs out of the context of the transaction 
+	@Transactional //enforce the spring JPA to start of a transaction to avoid 
+	//any properties lazy loading which could occur inside recipeCommandToRecipe.convert 
+	//and out of the context of the transaction. 
+	//We need to expand the transactional scope to those lazy loaded properties 
 	public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
 		
 		//detached from Hibernate context
@@ -72,5 +74,11 @@ public class RecipeServiceImpl implements RecipeService {
 		log.debug("Saved RecipeId : " + savedRecipe.getId());
 		return recipeToRecipeCommand.convert(savedRecipe);
 	}
+	
+	 @Override
+	    @Transactional
+	    public RecipeCommand findCommandById(Long l) {
+	        return recipeToRecipeCommand.convert(findById(l));
+	    }
 
 }
