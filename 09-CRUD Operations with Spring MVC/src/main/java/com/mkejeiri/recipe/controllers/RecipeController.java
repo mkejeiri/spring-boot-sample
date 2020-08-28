@@ -27,18 +27,18 @@ public class RecipeController {
 
 	@GetMapping("recipe/{id}/show") // spring 4.3 annotations
 	public String showById(@PathVariable String id, Model model) {
-		model.addAttribute("recipe", recipeService.findById(new Long(id)));
+		model.addAttribute("recipe", recipeService.findById(Long.parseLong(id)));
 		return "recipe/show";
 	}
 
-	@RequestMapping("recipe/new")
+	@GetMapping("recipe/new")
 	public String newRecipe(Model model) {
 		model.addAttribute("recipe", new RecipeCommand());
 
 		return "recipe/recipeform";
 	}
 
-	@RequestMapping("recipe/{id}/update")
+	@GetMapping("recipe/{id}/update")
 	public String updateRecipe(@PathVariable String id, Model model) {
 		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
 		return "recipe/recipeform";
@@ -47,8 +47,8 @@ public class RecipeController {
 	// this is an old way!
 	// @RequestMapping(value="recipe", method = RequestMethod.POST)
 
-	@PostMapping() // spring 4.3 annotations
-	@RequestMapping("recipe")
+	@PostMapping("recipe") // spring 4.3 annotations
+	//@RequestMapping("recipe")//this is already included in @GetMapping    
 	///this method is also used for the update, spring is smart enough to know if we are doing an update base on the provided Id property
 	//i.e. id = null or empty string => is an insert, existing id is an update
 	public String saveOrUpdate(@ModelAttribute // allow us to do the binding from the form into the RecipeCommand object
@@ -59,8 +59,8 @@ public class RecipeController {
 		return "redirect:/recipe/" + savedCommand.getId() + "/show";
 	}
 	
-	@GetMapping
-    @RequestMapping("recipe/{id}/delete")
+	@GetMapping("recipe/{id}/delete")
+    //@RequestMapping("recipe/{id}/delete")//this is already included in @GetMapping    
     public String deleteById(@PathVariable String id){
 
         log.debug("Deleting id: " + id);
