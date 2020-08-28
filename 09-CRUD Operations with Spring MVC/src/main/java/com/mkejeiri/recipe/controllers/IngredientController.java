@@ -21,84 +21,80 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class IngredientController {
 
-    private final IngredientService ingredientService;
-    private final RecipeService recipeService;
-    private final UnitOfMeasureService unitOfMeasureService;
+	private final IngredientService ingredientService;
+	private final RecipeService recipeService;
+	private final UnitOfMeasureService unitOfMeasureService;
 
-    public IngredientController(IngredientService ingredientService, RecipeService recipeService, UnitOfMeasureService unitOfMeasureService) {
-        this.ingredientService = ingredientService;
-        this.recipeService = recipeService;
-        this.unitOfMeasureService = unitOfMeasureService;
-    }
+	public IngredientController(IngredientService ingredientService, RecipeService recipeService,
+			UnitOfMeasureService unitOfMeasureService) {
+		this.ingredientService = ingredientService;
+		this.recipeService = recipeService;
+		this.unitOfMeasureService = unitOfMeasureService;
+	}
 
-    @GetMapping("/recipe/{recipeId}/ingredients")
-    //@RequestMapping("/recipe/{recipeId}/ingredients") //this is already included in @GetMapping    
-    public String listIngredients(@PathVariable String recipeId, Model model){
-        log.debug("Getting ingredient list for recipe id: " + recipeId);
+	@GetMapping("/recipe/{recipeId}/ingredients")
+	public String listIngredients(@PathVariable String recipeId, Model model) {
+		log.debug("Getting ingredient list for recipe id: " + recipeId);
 
-        // use command object to avoid lazy load errors in Thymeleaf.
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(recipeId)));
+		// use command object to avoid lazy load errors in Thymeleaf.
+		model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(recipeId)));
 
-        return "recipe/ingredient/list";
-    }
+		return "recipe/ingredient/list";
+	}
 
-    @GetMapping("recipe/{recipeId}/ingredient/{id}/show")
-    //@RequestMapping("recipe/{recipeId}/ingredient/{id}/show")//this is already included in @GetMapping    
-    public String showRecipeIngredient(@PathVariable String recipeId,
-                                       @PathVariable String id, Model model){
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
-        return "recipe/ingredient/show";
-    }
+	@GetMapping("recipe/{recipeId}/ingredient/{id}/show")
+	public String showRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
+		model.addAttribute("ingredient",
+				ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
 
-    @GetMapping("recipe/{recipeId}/ingredient/new")
-    //@RequestMapping("recipe/{recipeId}/ingredient/new")//this is already included in @GetMapping    
-    public String newIngredient(@PathVariable String recipeId, Model model){
+		return "recipe/ingredient/show";
+	}
 
-        //make sure we have a good id value
-        RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
-        //todo raise exception if null
+	@GetMapping("recipe/{recipeId}/ingredient/new")
+	public String newRecipe(@PathVariable String recipeId, Model model) {
 
-        //need to return back parent id for hidden form property
-        IngredientCommand ingredientCommand = new IngredientCommand();
-        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
-        model.addAttribute("ingredient", ingredientCommand);
+		// make sure we have a good id value
+		RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+		// todo raise exception if null
 
-        //init uom
-        ingredientCommand.setUom(new UnitOfMeasureCommand());
+		// need to return back parent id for hidden form property
+		IngredientCommand ingredientCommand = new IngredientCommand();
+		ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+		model.addAttribute("ingredient", ingredientCommand);
 
-        model.addAttribute("uomList",  unitOfMeasureService.listAllUoms());
+		// init uom
+		ingredientCommand.setUom(new UnitOfMeasureCommand());
 
-        return "recipe/ingredient/ingredientform";
-    }
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
-    @GetMapping("recipe/{recipeId}/ingredient/{id}/update")
-    //@RequestMapping("recipe/{recipeId}/ingredient/{id}/update")//this is already included in @GetMapping    
-    public String updateRecipeIngredient(@PathVariable String recipeId,
-                                         @PathVariable String id, Model model){
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
+		return "recipe/ingredient/ingredientform";
+	}
 
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
-        return "recipe/ingredient/ingredientform";
-    }
+	@GetMapping("recipe/{recipeId}/ingredient/{id}/update")
+	public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
+		model.addAttribute("ingredient",
+				ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
 
-    @PostMapping("recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+		return "recipe/ingredient/ingredientform";
+	}
 
-        log.debug("saved receipe id:" + savedCommand.getRecipeId());
-        log.debug("saved ingredient id:" + savedCommand.getId());
+	@PostMapping("recipe/{recipeId}/ingredient")
+	public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
+		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
 
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
-    }
-    
-    @GetMapping("recipe/{recipeId}/ingredient/{id}/delete")
-    //@RequestMapping("recipe/{recipeId}/ingredient/{id}/delete")//this is already included in @GetMapping    
-    public String deleteIngredient(@PathVariable String recipeId,
-                                   @PathVariable String id){
+		log.debug("saved receipe id:" + savedCommand.getRecipeId());
+		log.debug("saved ingredient id:" + savedCommand.getId());
 
-        log.debug("deleting ingredient id:" + id);
-        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(id));
+		return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+	}
 
-        return "redirect:/recipe/" + recipeId + "/ingredients";
-    }
+	@GetMapping("recipe/{recipeId}/ingredient/{id}/delete")
+	public String deleteIngredient(@PathVariable String recipeId, @PathVariable String id) {
+
+		log.debug("deleting ingredient id:" + id);
+		ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(id));
+
+		return "redirect:/recipe/" + recipeId + "/ingredients";
+	}
 }

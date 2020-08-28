@@ -3,13 +3,7 @@ package com.mkejeiri.recipe.converters;
 import org.springframework.stereotype.Component;
 
 import org.springframework.core.convert.converter.Converter;
-import com.mkejeiri.recipe.command.CategoryCommand;
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.NotesCommand;
 import com.mkejeiri.recipe.command.RecipeCommand;
-import com.mkejeiri.recipe.domain.Category;
-import com.mkejeiri.recipe.domain.Ingredient;
-import com.mkejeiri.recipe.domain.Notes;
 import com.mkejeiri.recipe.domain.Recipe;
 import com.sun.istack.Nullable;
 
@@ -46,7 +40,9 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
 		recipe.setDirections(source.getDirections());
 		recipe.setServings(source.getServings());
 		recipe.setSource(source.getSource());
-		recipe.setUrl(source.getUrl());
+		recipe.setUrl(source.getUrl());		
+		//Demo purposes: We don't have a use case to support that because we only render from the db to front-end!
+		recipe.setImage(source.getImage());
 
 		var notes = notesConverter.convert(source.getNotes());
 

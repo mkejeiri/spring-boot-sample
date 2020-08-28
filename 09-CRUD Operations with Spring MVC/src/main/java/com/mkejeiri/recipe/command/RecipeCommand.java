@@ -3,6 +3,8 @@ package com.mkejeiri.recipe.command;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Lob;
+
 import com.mkejeiri.recipe.domain.Difficulty;
 
 import lombok.Getter;
@@ -25,4 +27,6 @@ public class RecipeCommand {
     private Difficulty difficulty;
     private NotesCommand notes;
     private Set<CategoryCommand> categories = new HashSet<>();
+    @Lob
+    private Byte[] image;
 }

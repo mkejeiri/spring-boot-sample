@@ -18,7 +18,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
@@ -44,6 +43,8 @@ public class Recipe {
 	@Enumerated(EnumType.STRING)
 	private Difficulty difficulty;
 
+	//avoid to use primitive (i.e. Byte instead of byte!), that the recommendation of Hibernate team, 
+	//because a primitive CANNOT be null  that why we use a wrapper object of the primitive
 	@Lob
 	private Byte[] image;
 

@@ -3,13 +3,8 @@ package com.mkejeiri.recipe.converters;
 import org.springframework.stereotype.Component;
 
 import org.springframework.core.convert.converter.Converter;
-import com.mkejeiri.recipe.command.CategoryCommand;
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.NotesCommand;
 import com.mkejeiri.recipe.command.RecipeCommand;
 import com.mkejeiri.recipe.domain.Category;
-import com.mkejeiri.recipe.domain.Ingredient;
-import com.mkejeiri.recipe.domain.Notes;
 import com.mkejeiri.recipe.domain.Recipe;
 import com.sun.istack.Nullable;
 
@@ -47,7 +42,9 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand>{
         command.setServings(source.getServings());
         command.setSource(source.getSource());
         command.setUrl(source.getUrl());
+        command.setImage(source.getImage());
         command.setNotes(notesConverter.convert(source.getNotes()));
+       
 
         if (source.getCategories() != null && source.getCategories().size() > 0){
             source.getCategories()

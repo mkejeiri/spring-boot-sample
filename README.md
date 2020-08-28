@@ -15,7 +15,7 @@
 	<artifactId>junit-vintage-engine</artifactId>
 ```
 
-
+- 09-CRUD Operations with Spring MVC: CRUD operation on H2 database using Hibernate, upload images, save images into DB (not recommended, use S3 for instance), unit test and integration test
 
 ------------------
 # Project
