@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@SuppressWarnings("serial")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -19,6 +20,12 @@ import lombok.Setter;
 @Table(name = "types")
 public class PetType extends BaseEntity {
 	
+	@Builder
+    public PetType(Long id, String name) {
+        super(id);
+        this.name = name;
+    }
+	
 	@Column(name = "name")
 	private String name;
 
@@ -27,6 +34,7 @@ public class PetType extends BaseEntity {
 		return name;
 	}
 
+	
 	 
 //implemented under the cover by lombok project
 //	public String getName() {
