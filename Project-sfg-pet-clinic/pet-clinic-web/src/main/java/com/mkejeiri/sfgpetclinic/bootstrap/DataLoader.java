@@ -109,21 +109,21 @@ public class DataLoader implements CommandLineRunner {
 		petType.setName("dog");
 		var savedDogType = petTypeService.save(petType);
 
-		Pet mikesPet = new Pet();
-		mikesPet.setPetType(savedDogType);
-		mikesPet.setOwner(john);
-		mikesPet.setBirthDate(LocalDate.now());
-		mikesPet.setName("Rosco");
+		Pet mikesPet = Pet.builder()
+		.petType(savedDogType)
+		.owner(john)
+		.birthDate(LocalDate.now())
+		.name("Rosco").build();		
 		john.getPets().add(mikesPet);
 		var savedMikesPet = petService.save(mikesPet);
 		var dogVisit = new Visit(LocalDate.now(), "Mike dog visit",savedMikesPet);		
 		visitService.save(dogVisit);
 
-		Pet sarahPet = new Pet();
-		sarahPet.setPetType(savedCatType);
-		sarahPet.setOwner(sarah);
-		sarahPet.setName("moeu");
-		sarahPet.setBirthDate(LocalDate.now());
+		Pet sarahPet = Pet.builder()
+		.petType(savedCatType)
+		.owner(sarah)
+		.name("moeu")
+		.birthDate(LocalDate.now()).build();		
 		sarahPet.getOwner().getPets().add(sarahPet);
 		var savedSarahPet = petService.save(sarahPet);
 		

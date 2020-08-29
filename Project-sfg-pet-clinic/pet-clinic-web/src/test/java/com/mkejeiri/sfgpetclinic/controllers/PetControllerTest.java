@@ -51,7 +51,7 @@ class PetControllerTest {
 	void setUp() throws Exception {
 		owner = Owner.builder().id(1l).build();
 
-        petTypes = new HashSet<>();
+        petTypes = new HashSet<PetType>();
         petTypes.add(PetType.builder().id(1L).name("Dog").build());
         petTypes.add(PetType.builder().id(2L).name("Cat").build());
 

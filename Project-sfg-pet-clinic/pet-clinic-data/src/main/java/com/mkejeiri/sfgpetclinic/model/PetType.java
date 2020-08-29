@@ -15,12 +15,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder //Allow us to work with build pattern
 @Entity
 @Table(name = "types")
 public class PetType extends BaseEntity {
 	
-	@Builder
+	@Builder  //Allow us to work with build pattern
     public PetType(Long id, String name) {
         super(id);
         this.name = name;
