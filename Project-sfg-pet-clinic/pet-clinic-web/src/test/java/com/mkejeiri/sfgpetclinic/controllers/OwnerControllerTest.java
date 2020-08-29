@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.anyLong;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -86,5 +87,19 @@ class OwnerControllerTest {
 		mockMvc.perform(get("/owners/find")).andExpect(status().isOk());
 		verifyZeroInteractions(ownerService);
 	}
+	
+	@Test
+    void displayOwner() throws Exception {
+		
+		//Given
+		var owner = Owner.builder().id(1l).build();
+        when(ownerService.findById(anyLong())).thenReturn(owner);
+
+        //When and then
+        mockMvc.perform(get("/owners/123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/ownerDetails"))
+                .andExpect(model().attribute("owner", hasProperty("id", is(1l))));
+    }
 
 }
