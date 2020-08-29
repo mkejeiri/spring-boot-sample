@@ -101,6 +101,16 @@ class OwnerControllerTest {
 		verify(ownerService).save(ArgumentMatchers.any());
 	}
 
+	@Test
+    void initCreationForm() throws Exception {
+        mockMvc.perform(get("/owners/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/createOrUpdateOwnerForm"))
+                .andExpect(model().attributeExists("owner"));
+
+        verifyNoMoreInteractions(ownerService);
+    }
+	
 	
 	@Test
 	void initUpdateOwnerForm() throws Exception {

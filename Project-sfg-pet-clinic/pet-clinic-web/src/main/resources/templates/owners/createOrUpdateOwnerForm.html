@@ -19,6 +19,8 @@
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
+      
+      <!-- owner['new'] = BaseEntity.isNew() -->
         <button
           th:with="text=${owner['new']} ? 'Add Owner' : 'Update Owner'"
           class="btn btn-default" type="submit" th:text="${text}">Add

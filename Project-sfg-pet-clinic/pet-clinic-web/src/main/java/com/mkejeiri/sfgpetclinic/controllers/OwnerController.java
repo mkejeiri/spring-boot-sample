@@ -69,6 +69,7 @@ public class OwnerController {
 		}
 
 		// find owners by last name
+		// under the cover JPA will do SQL query with like clause and surround the predicate with "%".
 		List<Owner> results = ownerService.findAllByLastNameLike("%" + owner.getLastName() + "%");
 
 		if (results.isEmpty()) {
@@ -116,7 +117,12 @@ public class OwnerController {
 	}
 
 	@PostMapping("/{ownerId}/edit")
-	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result, @PathVariable Long ownerId) {
+	public String processUpdateOwnerForm(@Valid Owner owner, BindingResult result, 
+			//@PathVariable Long ownerId
+			@PathVariable("ownerId") Long ownerId //We could omit this and use '@PathVariable Long ownerId'
+			//as long as ownerId  (i.e. Long ownerId) matches the one in the @PostMapping("/{ownerId}/edit")
+			)
+	{
 		if (result.hasErrors()) {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		} else {
