@@ -1,4 +1,4 @@
-package com.mkejeiri.recipe.command;
+package com.mkejeiri.recipe.commands;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

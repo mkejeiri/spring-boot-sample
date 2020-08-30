@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.RecipeCommand;
-import com.mkejeiri.recipe.command.UnitOfMeasureCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
+import com.mkejeiri.recipe.commands.UnitOfMeasureCommand;
 import com.mkejeiri.recipe.services.IngredientService;
 import com.mkejeiri.recipe.services.RecipeService;
 import com.mkejeiri.recipe.services.UnitOfMeasureService;

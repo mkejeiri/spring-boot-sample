@@ -3,11 +3,12 @@ package com.mkejeiri.recipe.converters;
 import org.springframework.stereotype.Component;
 
 import org.springframework.core.convert.converter.Converter;
-import com.mkejeiri.recipe.command.CategoryCommand;
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.NotesCommand;
-import com.mkejeiri.recipe.command.RecipeCommand;
-import com.mkejeiri.recipe.command.UnitOfMeasureCommand;
+
+import com.mkejeiri.recipe.commands.CategoryCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
+import com.mkejeiri.recipe.commands.NotesCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
+import com.mkejeiri.recipe.commands.UnitOfMeasureCommand;
 import com.mkejeiri.recipe.domain.Category;
 import com.mkejeiri.recipe.domain.Ingredient;
 import com.mkejeiri.recipe.domain.Notes;

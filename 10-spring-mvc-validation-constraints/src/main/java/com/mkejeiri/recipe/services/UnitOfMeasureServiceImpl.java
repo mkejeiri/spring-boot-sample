@@ -6,7 +6,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.stereotype.Service;
 
-import com.mkejeiri.recipe.command.UnitOfMeasureCommand;
+import com.mkejeiri.recipe.commands.UnitOfMeasureCommand;
 import com.mkejeiri.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import com.mkejeiri.recipe.repositories.UnitOfMeasureRepository;
 

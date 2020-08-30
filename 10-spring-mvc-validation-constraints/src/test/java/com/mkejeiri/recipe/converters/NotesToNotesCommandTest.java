@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mkejeiri.recipe.command.NotesCommand;
+import com.mkejeiri.recipe.commands.NotesCommand;
 import com.mkejeiri.recipe.domain.Notes;
 
 public class NotesToNotesCommandTest {

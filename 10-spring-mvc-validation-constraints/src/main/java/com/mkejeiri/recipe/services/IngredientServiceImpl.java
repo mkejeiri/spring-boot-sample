@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
 import com.mkejeiri.recipe.converters.IngredientCommandToIngredient;
 import com.mkejeiri.recipe.converters.IngredientToIngredientCommand;
 import com.mkejeiri.recipe.domain.Ingredient;

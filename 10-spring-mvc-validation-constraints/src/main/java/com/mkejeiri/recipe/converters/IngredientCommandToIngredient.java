@@ -4,7 +4,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
 import com.mkejeiri.recipe.domain.Ingredient;
 
 @Component

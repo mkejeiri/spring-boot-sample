@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mkejeiri.recipe.command.CategoryCommand;
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.NotesCommand;
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.CategoryCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
+import com.mkejeiri.recipe.commands.NotesCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.domain.Difficulty;
 import com.mkejeiri.recipe.domain.Recipe;
 

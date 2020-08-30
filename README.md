@@ -22,6 +22,24 @@
 	- ResponseStatusExceptionResolver: Looks for uncaught exceptions matching @ResponseStatus
 	- DefaultHandlerExceptionResolver: Converts standard Spring Exceptions to HTTP status codes (Internal to Spring MVC)
 
+
+> **i18n**: WebMvcProperties.LocaleResolver.FIXED is will look into the JVM for **i18n**, otherwise spring  MVC will look into the header, we [DO NOT need to implement the WebMvcConfigurer interface in @Configuration class and override the addInterceptors() which is looking into the headers](https://www.baeldung.com/spring-boot-internationalization) 
+ 
+```
+WebMvcAutoConfiguration class where the magic happens
+....
+		@Bean
+		@ConditionalOnMissingBean
+		@ConditionalOnProperty(prefix = "spring.mvc", name = "locale")
+		public LocaleResolver localeResolver() {
+			if (this.mvcProperties.getLocaleResolver() == WebMvcProperties.LocaleResolver.FIXED) {
+				return new FixedLocaleResolver(this.mvcProperties.getLocale());
+			}
+			AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+			localeResolver.setDefaultLocale(this.mvcProperties.getLocale());
+			return localeResolver;
+		}
+```
 ------------------
 # Project
 There is a **Project-sfg-pet-clinic** which goes through all of the above.

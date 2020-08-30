@@ -22,8 +22,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Matchers.anyLong;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.domain.Recipe;
 import com.mkejeiri.recipe.services.IngredientService;
 import com.mkejeiri.recipe.services.RecipeService;

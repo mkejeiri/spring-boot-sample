@@ -3,7 +3,8 @@ package com.mkejeiri.recipe.converters;
 import org.springframework.stereotype.Component;
 
 import org.springframework.core.convert.converter.Converter;
-import com.mkejeiri.recipe.command.CategoryCommand;
+
+import com.mkejeiri.recipe.commands.CategoryCommand;
 import com.mkejeiri.recipe.domain.Category;
 import com.sun.istack.Nullable;
 

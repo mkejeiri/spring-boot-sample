@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
-import com.mkejeiri.recipe.command.UnitOfMeasureCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
+import com.mkejeiri.recipe.commands.UnitOfMeasureCommand;
 import com.mkejeiri.recipe.domain.Ingredient;
 import com.mkejeiri.recipe.domain.Recipe;
 

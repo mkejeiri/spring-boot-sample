@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.*;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
 import com.mkejeiri.recipe.converters.IngredientCommandToIngredient;
 import com.mkejeiri.recipe.converters.IngredientToIngredientCommand;
 import com.mkejeiri.recipe.converters.UnitOfMeasureCommandToUnitOfMeasure;

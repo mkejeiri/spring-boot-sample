@@ -20,7 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.converters.RecipeCommandToRecipe;
 import com.mkejeiri.recipe.converters.RecipeToRecipeCommand;
 import com.mkejeiri.recipe.domain.Recipe;

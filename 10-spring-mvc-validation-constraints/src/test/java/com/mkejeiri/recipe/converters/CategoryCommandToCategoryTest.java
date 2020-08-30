@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 
-import com.mkejeiri.recipe.command.CategoryCommand;
+import com.mkejeiri.recipe.commands.CategoryCommand;
 import com.mkejeiri.recipe.domain.Category;
 
 @ExtendWith(MockitoExtension.class)

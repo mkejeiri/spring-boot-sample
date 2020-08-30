@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.services.ImageService;
 import com.mkejeiri.recipe.services.RecipeService;
 

@@ -8,8 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.converters.RecipeCommandToRecipe;
 import com.mkejeiri.recipe.converters.RecipeToRecipeCommand;
 import com.mkejeiri.recipe.domain.Recipe;

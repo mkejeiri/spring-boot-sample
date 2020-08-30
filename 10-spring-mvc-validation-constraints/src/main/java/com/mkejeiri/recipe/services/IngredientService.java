@@ -1,6 +1,6 @@
 package com.mkejeiri.recipe.services;
 
-import com.mkejeiri.recipe.command.IngredientCommand;
+import com.mkejeiri.recipe.commands.IngredientCommand;
 
 public interface IngredientService {
 

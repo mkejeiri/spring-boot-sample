@@ -6,6 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -18,7 +21,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.services.ImageService;
 import com.mkejeiri.recipe.services.RecipeService;
 
@@ -38,7 +41,9 @@ class ImageControllerTest {
 		MockitoAnnotations.initMocks(this);
 
 		controller = new ImageController(imageService, recipeService);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(controller)
+				.setControllerAdvice(new ExceptionHandlerController())
+				.build();
 	}
 
 	@Test
@@ -50,11 +55,24 @@ class ImageControllerTest {
 		when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
 		// when
-		mockMvc.perform(get("/recipe/1/image")).andExpect(status().isOk()).andExpect(model().attributeExists("recipe"));
+		mockMvc.perform(get("/recipe/1/image"))
+		.andExpect(status().isOk())
+		.andExpect(model()
+	    .attributeExists("recipe"));
 
 		verify(recipeService, times(1)).findCommandById(anyLong());
 
 	}
+	
+	@Test
+	public void getImageFormBadRequest() throws Exception {
+		
+		// when
+		mockMvc.perform(get("/recipe/aa/image"))
+		.andExpect(status().isBadRequest())
+		.andExpect(view().name("400error"));
+	}
+	
 
 	@Test
 	public void handleImagePost() throws Exception {

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mkejeiri.recipe.command.CategoryCommand;
+import com.mkejeiri.recipe.commands.CategoryCommand;
 import com.mkejeiri.recipe.domain.Category;
 
 class CategoryToCategoryCommandTest {

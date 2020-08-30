@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.mkejeiri.recipe.command.RecipeCommand;
+import com.mkejeiri.recipe.commands.RecipeCommand;
 import com.mkejeiri.recipe.domain.Recipe;
 import com.mkejeiri.recipe.exceptions.NotFoundException;
 import com.mkejeiri.recipe.services.RecipeService;
@@ -34,14 +34,16 @@ class RecipeControllerTest {
 
 	RecipeController controller;
 
-	MockMvc mockMvc;
+	MockMvc mockMvc;	
 
 	@BeforeEach
 	void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
 		controller = new RecipeController(recipeService);
-		mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(controller)
+				.setControllerAdvice(new ExceptionHandlerController()) //rely not on spring context to keep unit test lightweight
+				.build();
 	}
 
 	 @Test
@@ -55,7 +57,7 @@ class RecipeControllerTest {
 	        .andExpect(view().name("404error"));
 	    }
 	 
-	 @Test
+	 @Test //need to wire ControllerAdvice in mockMvc
 	    public void testGetRecipeNumberFormatException() throws Exception {
 
 		 //this commented out because the exception will pop up because getting into RecipeService 
@@ -80,33 +82,16 @@ class RecipeControllerTest {
 	}
 
 	@Test
-	public void testPostNewRecipeForm() throws Exception {
-
-		// given
-		Long id = 2L;
-		RecipeCommand command = new RecipeCommand();
-		command.setId(id);
-		command.setDescription("some description");
-
-		// when
-		when(recipeService.saveRecipeCommand(any())).thenReturn(command);
-
-		// then
-		mockMvc.perform(post("/recipe").contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("id", id.toString())
-                .param("description", "some description")
-		).andExpect(status().is3xxRedirection()).andExpect(view().name("redirect:/recipe/2/show"));
-	}
-
-	@Test
 	public void testGetUpdateView() throws Exception {
 		RecipeCommand command = new RecipeCommand();
 		command.setId(2L);
 
 		when(recipeService.findCommandById(anyLong())).thenReturn(command);
 
-		mockMvc.perform(get("/recipe/1/update")).andExpect(status().isOk()).andExpect(view().name("recipe/recipeform"))
-				.andExpect(model().attributeExists("recipe"));
+		mockMvc.perform(get("/recipe/1/update"))
+		.andExpect(status().isOk())
+		.andExpect(view().name("recipe/recipeform"))
+		.andExpect(model().attributeExists("recipe"));
 	}
 	
 	
@@ -120,5 +105,40 @@ class RecipeControllerTest {
         verify(recipeService, times(1)).deleteById(anyLong());
     }
 	
+	@Test
+	public void testPostNewRecipeFormValidationFail() throws Exception {
+		RecipeCommand command = new RecipeCommand();
+		command.setId(2L);
+		command.setDescription("some description");
+		command.setDirections("some directions");
+
+		//an unnecessary stub: is a stubbed method call that was never realized during test execution
+		//more : https://www.baeldung.com/mockito-unnecessary-stubbing-exception
+		//when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+
+		mockMvc.perform(post("/recipe")
+				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+				.param("id", ""))
+		
+		.andExpect(status().isOk())
+		.andExpect(model().attributeExists("recipe"))
+		.andExpect(view().name("recipe/recipeform"));
+	}
 	
+	@Test
+    public void testPostNewRecipeForm() throws Exception {
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+
+        when(recipeService.saveRecipeCommand(any())).thenReturn(command);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+                .param("description", "some string")
+                .param("directions", "some directions")
+        )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/2/show"));
+    }
 }
