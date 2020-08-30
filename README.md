@@ -17,6 +17,11 @@
 
 - 09-CRUD Operations with Spring MVC: CRUD operation on H2 database using Hibernate, upload images, save images into DB (not recommended, use S3 for instance), unit test and integration test
 
+- 10-spring-mvc-validation-constraints : adding exceptions handling + test :@ResponseStatus annotation, ExceptionHandler with 3 implementations of HandlerExceptionResolver :
+	- ExceptionHandlerExceptionResolver: Matches uncaught exceptions to @ExceptionHandler
+	- ResponseStatusExceptionResolver: Looks for uncaught exceptions matching @ResponseStatus
+	- DefaultHandlerExceptionResolver: Converts standard Spring Exceptions to HTTP status codes (Internal to Spring MVC)
+
 ------------------
 # Project
 There is a **Project-sfg-pet-clinic** which goes through all of the above.
