@@ -1,24 +1,28 @@
 package com.mkejeiri.sfgpetclinic.controllers;
 
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.mkejeiri.sfgpetclinic.model.Pet;
 import com.mkejeiri.sfgpetclinic.model.Visit;
 import com.mkejeiri.sfgpetclinic.services.PetService;
 import com.mkejeiri.sfgpetclinic.services.VisitService;
 
-import javax.validation.Valid;
-import java.beans.PropertyEditorSupport;
-import java.time.LocalDate;
-import java.util.Map;
-
 @Controller
 public class VisitController {
-
-    private final VisitService visitService;
+	private final VisitService visitService;
     private final PetService petService;
 
     public VisitController(VisitService visitService, PetService petService) {
@@ -59,13 +63,13 @@ public class VisitController {
     }
 
     // Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
-    @GetMapping("owners/*/pets/{petId}/visits/new")
+    @GetMapping("/owners/*/pets/{petId}/visits/new")
     public String initNewVisitForm(@PathVariable("petId") Long petId, Map<String, Object> model) {
         return "pets/createOrUpdateVisitForm";
     }
 
     // Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
-    @PostMapping("owners/{ownerId}/pets/{petId}/visits/new")
+    @PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
     public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
         if (result.hasErrors()) {
             return "pets/createOrUpdateVisitForm";

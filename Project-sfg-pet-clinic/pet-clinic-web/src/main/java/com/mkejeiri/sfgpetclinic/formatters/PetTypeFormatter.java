@@ -24,27 +24,28 @@ import com.mkejeiri.sfgpetclinic.services.PetTypeService;
 public class PetTypeFormatter implements Formatter<PetType> {
 	private final PetTypeService petTypeService;
 
-	public PetTypeFormatter(PetTypeService petTypeService) {
-		this.petTypeService = petTypeService;
-	}
-
+    public PetTypeFormatter(PetTypeService petTypeService) {
+        this.petTypeService = petTypeService;
+    }
 	@Override
-	public String print(PetType petType, Locale locale) {
-		return petType.getName();
-	}
+    public String print(PetType petType, Locale locale) {
+        return petType.getName();
+    }
 
-	//when the form submit petype as string (dog, cat, ...) this controller parse Interceptor get called 
+	//when the form submit PeType as string (dog, cat, ...) this controller parse Interceptor get called 
 	//and do the conversion from string into  PetType 
 	@Override
-	public PetType parse(String text, Locale locale) throws ParseException {
-		Collection<PetType> findPetTypes = petTypeService.findAll();
-		for (PetType type : findPetTypes) {
-			if (type.getName().equals(text)) {
-				return type;
-			}
-		}
-		throw new ParseException("type not found: " + text, 0);
-	}
+    public PetType parse(String text, Locale locale) throws ParseException {
+        Collection<PetType> findPetTypes = petTypeService.findAll();
+
+        for (PetType type : findPetTypes) {
+            if (type.getName().equals(text)) {
+                return type;
+            }
+        }
+
+        throw new ParseException("type not found: " + text, 0);
+    }
 	
 
 }
