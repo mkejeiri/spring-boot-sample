@@ -30,6 +30,12 @@ public class VisitController {
         this.petService = petService;
     }
 
+  //2 techniques to deal with date formatting : on class level (see Pet.class) OR 
+  //controller level (on each request see  @InitBinder on VisitController) 
+  //this Date Time Formatting technique will works only on request coming to this controller and 
+  //acts a preprocessor before the model binding
+  //this technique (@InitBinder) gives control on the TYPE of data (it's more global), 
+  //while DateTimeFormatting works on a property class level (more local)  
     @InitBinder
     public void dataBinder(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");

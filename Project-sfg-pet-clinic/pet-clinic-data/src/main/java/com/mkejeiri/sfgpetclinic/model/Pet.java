@@ -12,10 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
@@ -36,7 +37,7 @@ public class Pet extends BaseEntity {
 		this.petType = petType;
 		this.owner = owner;
 		this.birthDate = birthDate;
-		if (visits == null || visits.size() > 0) {
+		if (visits !=null && visits.size() > 0) {
 			this.visits = visits;
 		}
 	}
@@ -54,6 +55,11 @@ public class Pet extends BaseEntity {
 	private Owner owner;
 
 	@Column(name = "birth_date")
+	//2 techniques to deal with date formatting : on class level (see Pet.class) OR 
+	//controller level (on each request see  @InitBinder on VisitController) 
+	//this Date Time Formatting technique will works only on Pet class
+	//this technique gives control on a property while  @InitBinder  gives control on the type (more global)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
