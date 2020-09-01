@@ -1,0 +1,15 @@
+# Use root/example as user/password credentials
+version: '3.1'
+services:
+  db:
+    image: mysql
+    restart: always
+    volumes:
+        - "C:/docker-spring/db:/var/lib/mysql"
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: mydb
+        MYSQL_USER: user
+        MYSQL_PASSWORD: pass
+    ports:
+        - 42333:3306
