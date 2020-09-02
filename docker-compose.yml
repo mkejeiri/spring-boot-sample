@@ -6,10 +6,12 @@ services:
     restart: always
     volumes:
         - "C:/docker-spring/db:/var/lib/mysql"
+        - "D:/Spring-boot/11-spring-boot-mysql/src/main/scripts:/docker-entrypoint-initdb.d"
     environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: mydb
         MYSQL_USER: user
         MYSQL_PASSWORD: pass
     ports:
-        - 42333:3306
+        - 42333:42333
+        - 3306:3306

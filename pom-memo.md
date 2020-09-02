@@ -62,3 +62,14 @@ A litte explantion of the list of dependencies.
 		</dependency>
 ```
 
+
+##### mysql-connector-java brings mysql driver
+```
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+```
+
+
+
