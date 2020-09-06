@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 			// registered
 // into spring context
 //and later, the onApplicationEvent method get executed when ApplicationContext gets initialised or refreshed.
+@Profile("default")
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 	private final CategoryRepository categoryRepository;
 	private final RecipeRepository recipeRepository;
@@ -273,6 +275,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 	@Override
 	@org.springframework.transaction.annotation.Transactional
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		recipeRepository.saveAll(getRecipes());
+		//recipeRepository.saveAll(getRecipes());
 	}
 }

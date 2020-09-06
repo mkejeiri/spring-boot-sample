@@ -5,11 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @Entity
+@NoArgsConstructor
 public class UnitOfMeasure {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +39,12 @@ public class UnitOfMeasure {
 	@Override
 	public String toString() {
 		return "UnitOfMeasure [id=" + id + ", description=" + description + "]";
+	}
+
+	@Builder
+	public UnitOfMeasure(Long id, String description) {
+		this.id = id;
+		this.description = description;
 	}
 
 }
