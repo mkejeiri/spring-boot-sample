@@ -1,8 +1,7 @@
 package com.mkejeiri.recipe.controllers;
 
-import com.mkejeiri.recipe.config.WebConfig;
-import com.mkejeiri.recipe.domain.Recipe;
-import com.mkejeiri.recipe.services.RecipeService;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -10,53 +9,52 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
+
+import com.mkejeiri.recipe.config.WebConfig;
+import com.mkejeiri.recipe.domain.Recipe;
+import com.mkejeiri.recipe.services.RecipeService;
+
 import reactor.core.publisher.Flux;
-
-import static org.mockito.Mockito.when;
-
-/**
- 
- */
 
 public class RouterFunctionTest {
 
-    WebTestClient webTestClient;
+	WebTestClient webTestClient;
 
-    @Mock
-    RecipeService recipeService;
+	@Mock
+	RecipeService recipeService;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
+	@BeforeEach
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
 
-        WebConfig webConfig = new WebConfig();
+		WebConfig webConfig = new WebConfig();
 
-        RouterFunction<?> routerFunction = webConfig.routes(recipeService);
+		// building the router function for testing purposes!
+		RouterFunction<?> routerFunction = webConfig.routes(recipeService);
 
-        webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build();
-    }
+		webTestClient = WebTestClient.bindToRouterFunction(routerFunction).build();
+	}
 
+	@Test
+	public void testGetRecipes() throws Exception {
 
-    @Test
-    public void testGetRecipes() throws Exception {
+		when(recipeService.getRecipes())
+		.thenReturn(Flux.just()/* Empty flux */);
 
-        when(recipeService.getRecipes()).thenReturn(Flux.just());
+		webTestClient.get().uri("/api/recipes")
+		.accept(MediaType.APPLICATION_JSON)
+		.exchange()
+		.expectStatus().isOk();
+	}
 
-        webTestClient.get().uri("/api/recipes")
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk();
-    }
+	@Test
+	public void testGetRecipesWithData() throws Exception {
 
-    @Test
-    public void testGetRecipesWithData() throws Exception {
+		when(recipeService.getRecipes()).thenReturn(Flux.just(new Recipe(), new Recipe()));
 
-        when(recipeService.getRecipes()).thenReturn(Flux.just(new Recipe(), new Recipe()));
-
-        webTestClient.get().uri("/api/recipes")
-                .accept(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(Recipe.class);
-    }
+		webTestClient.get().uri("/api/recipes")
+		.accept(MediaType.APPLICATION_JSON)
+		.exchange().expectStatus().isOk()
+		.expectBodyList(Recipe.class);
+	}
 }

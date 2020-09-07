@@ -43,3 +43,4 @@ WebMvcAutoConfiguration class where the magic happens
 ------------------
 # Project
 There is a **Project-sfg-pet-clinic** which goes through all of the above.
+
