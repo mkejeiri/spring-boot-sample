@@ -153,3 +153,58 @@ Example : `mvn archetype:generate -DarchetypeArtifactId=maven-archetype-archetyp
 ` [more...](https://maven.apache.org/archetypes/) 
 >> in windows it works only in cmd and not in powershell.
 
+
+# Maven Plugins
+
+**Maven Clean Plugin**
+---
+- Build Lifecycle - CLEAN 
+- Has only one goal - 'clean'
+- Purpose is to remove files generated during build process.
+- By default removes /target directory project root and submodule root folders
+
+**Maven Compiler Plugin** : Build Lifecycle - DEFAULT
+---
+- Has **two goals** : `compiler:compile`, `compiler:testCompile`
+- By Default uses the compiler `javax.tools.JavaCompiler`
+- Can be configured to use javac if needed
+- Default source and target language levels are `Java 1.6`
+- Apache team encourages these values to be set
+
+**Maven Resources Plugin** : Build Lifecycle - DEFAULT
+---
+- Has **3 goals**:  `resources:resources`, `resources:testResources`, `resources:copy-resources`
+- Purpose is to **copy project resources** to output directory (**target dir**)
+- Can be configured for encoding, **source and target directories**
+- Rather versatile configuration options for **copying files** during **build processing**
+
+Maven Surefire Plugin: Build Lifecycle - DEFAULT
+----
+- Has **1 goal**: `surefire:test`
+- The **Surefire plugin** is used to **execute unit test** of the project.
+- By default supports `JUnit 3`, `JUnit 4`, `JUnit 5`, and `TestNG`
+- `Cucumber` runs under `JUnit`, `Spock` compiles to **JUnit byte code**.
+- By default includes classes named: `**/Test*.java` ` **/*Test.java` `**/*Tests.java` `**/*TestCase.java`
+
+
+Maven jar plugin : Build Lifecycle - DEFAULT
+---
+- Has **2 goals**: `jar:jar` and `jar:test-jar`
+- **Purpose** is to **build jars** from **complied artifacts** and **project resources**
+- Can be **configured** for **custom manifests**, and to **make** **executable jars**.
+
+Maven Deploy Plugin : Build Lifecycle - DEFAULT
+---
+- Has **2 goals** : `deploy:deploy` and  `deploy:deploy-file`
+- **Purpose** is to **deploy project artifacts** to **remote** **Maven repositories**
+- Often done in **CI**
+- **Configuration** is typically **part** of the Maven **POM**
+
+Maven Site Plugin : Build Lifecycle - SITE
+----
+has **7 goals**
+- `site:site` : Generate site for project
+- `site:deploy` : Deploy site via Wagon
+- `site:run` : Run Site locally using Jetty as web server
+- `site:stage` : generate site to a local staging directory
+- `site:stage-deploy` : Deploy site to remote staging location
