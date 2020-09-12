@@ -163,11 +163,46 @@ Example : `mvn archetype:generate -DarchetypeArtifactId=maven-archetype-archetyp
 - Purpose is to remove files generated during build process.
 - By default removes /target directory project root and submodule root folders
 
+
+**In maven all phases of lifecycles are hooks around plugin which have plugin's default implementations per phases that we could also customized**
+
+> for **initialize** phase we explicitly add the clean goal, thus all phase will run the goal clean since they have the initialize phase
+
+```
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-clean-plugin</artifactId>
+			<!--<version>3.1.0</version>-->
+			<executions>
+				<execution>				
+					<id>my-auto-clean</id>
+					<phase>initialize</phase>
+					<goals>
+						<goal>clean</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+```
+
+>> output :
+```
+...
+[INFO] --- maven-clean-plugin:2.5:clean (my-auto-clean) @ hello-world ---
+[INFO] Deleting C:\Java-Examples\helloworld\target
+..
+```
+
+
 **Maven Compiler Plugin** : Build Lifecycle - DEFAULT
 ---
 - Has **two goals** : `compiler:compile`, `compiler:testCompile`
-- By Default uses the compiler `javax.tools.JavaCompiler`
-- Can be configured to use javac if needed
+- By Default uses the compiler `javax.tools.JavaCompiler` out of JVM and which is the default compiler available within the JVM and not the `javac` we use in command line available also within the JVM!
+- Can be **configured** to use `javac` if needed
 - Default source and target language levels are `Java 1.6`
 - Apache team encourages these values to be set
 
@@ -187,24 +222,109 @@ Maven Surefire Plugin: Build Lifecycle - DEFAULT
 - By default includes classes named: `**/Test*.java` ` **/*Test.java` `**/*Tests.java` `**/*TestCase.java`
 
 
-Maven jar plugin : Build Lifecycle - DEFAULT
+**Maven jar plugin : Build Lifecycle - DEFAULT**
 ---
 - Has **2 goals**: `jar:jar` and `jar:test-jar`
 - **Purpose** is to **build jars** from **complied artifacts** and **project resources**
 - Can be **configured** for **custom manifests**, and to **make** **executable jars**.
+- e.g. used by **Springboot** out of the box.
 
-Maven Deploy Plugin : Build Lifecycle - DEFAULT
+
+  see ["Creating an Executable JAR File"](https://maven.apache.org/shared/maven-archiver/examples/classpath.html) 
+    
+ **pom.xml**
+ ```
+ ...
+  <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-jar-plugin</artifactId>
+	<configuration>
+		<archive>
+			<manifest>
+				<addClasspath>true</addClasspath>
+				<mainClass>FullyQualifiedPackageName.HelloWorld</mainClass>
+			</manifest>
+		</archive>
+	</configuration>
+</plugin>
+...
+ ```
+  
+
+**Maven Deploy Plugin : Build Lifecycle - DEFAULT**
 ---
 - Has **2 goals** : `deploy:deploy` and  `deploy:deploy-file`
 - **Purpose** is to **deploy project artifacts** to **remote** **Maven repositories**
 - Often done in **CI**
 - **Configuration** is typically **part** of the Maven **POM**
 
+  see ["Apache Maven Deploy Plugin"](https://maven.apache.org/plugins/maven-deploy-plugin/usage.html) 
+
+ we could use different Apache wagon protocols for deployment : [https, ssh, ftp ](https://maven.apache.org/plugins/maven-deploy-plugin/project-deployment.html)
+ 
 Maven Site Plugin : Build Lifecycle - SITE
 ----
-has **7 goals**
+It has **7 goals**
 - `site:site` : Generate site for project
 - `site:deploy` : Deploy site via Wagon
-- `site:run` : Run Site locally using Jetty as web server
-- `site:stage` : generate site to a local staging directory
-- `site:stage-deploy` : Deploy site to remote staging location
+- `site:run` : Run Site **locally** using **Jetty** as **web server**
+- `site:stage` : generate site to a local staging directory for testing
+- `site:stage-deploy` : Deploy site to remote staging location for testing
+- `site:attach-descriptor` : **adds site.xml** (site map file used by search engines) to files for **deployment**
+- `site:jar` : **bundles site** into a jar for **deployment** to a Maven **repository**
+- `site:effective-site` : generates the **site.xml** file
+
+
+ 
+> Maven environment (maven 3.6.0) brings always [maven-site-plugin 3.3](https://stackoverflow.com/questions/51103120/why-does-maven-site-plugin-always-use-version-3-3), to fix this see the code snippet below : 
+
+```
+ <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-site-plugin</artifactId>
+	<version>3.7.1</version>
+</plugin>
+```
+see https://maven.apache.org/ref/3.6.3/
+and https://maven.apache.org/ref/3.6.3/maven-core/lifecycles.html in the **site Lifecycle** code snippet they bind to maven-site-plugin:3.3 instead of 3.7.1!
+```
+<phases>
+  <phase>pre-site</phase>
+  <phase>site</phase>
+  <phase>post-site</phase>
+  <phase>site-deploy</phase>
+</phases>
+<default-phases>
+  <site>
+    org.apache.maven.plugins:maven-site-plugin:3.3:site
+  </site>
+  <site-deploy>
+    org.apache.maven.plugins:maven-site-plugin:3.3:deploy
+  </site-deploy>
+</default-phases>
+```
+ 
+**Maven commands**
+---
+
+```
+#mvn plugin: run all goal within the plugin!
+mvn clean
+
+#mvn plugin:goal
+mvn clean:clean 
+
+mvn validate
+
+mvn test
+
+#combine 2 lifecycles
+mvn clean test
+
+#install the jar's in .m2 local repository
+mvn install
+
+mvn dependency:tree
+
+mvn help:effective-pom
+```
