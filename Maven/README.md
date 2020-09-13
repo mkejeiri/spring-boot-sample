@@ -629,7 +629,7 @@ cases of **Code Smells** with **Modules**:
 - In Maven terminology, a **BOM** has become to mean **dependencies declared** within the
 **dependencyManagement** section of the **POM**.
 - **Fully qualified dependencies** are listed under the **dependencyManagement section** of the POM
-- **Dependencies declared **under the **dependencies section** of the **POM inherit** from **dependencyManagement** (**version / packaging**)
+- **Dependencies declared** under the **dependencies section** of the **POM inherit** from **dependencyManagement** (**version / packaging**)
 - Typically **used** to **standardized versions**.
 
 
