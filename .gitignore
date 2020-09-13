@@ -165,5 +165,5 @@ Desktop.ini
 .eslintcache
 
 *.iml
-
+.flattened-pom*
 target/

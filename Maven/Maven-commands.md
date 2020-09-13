@@ -582,3 +582,60 @@ for Scala with Maven, please see documentation on [SCALA WITH MAVEN
     </build>
  
 ``` 
+
+
+**Multiple Modules in Maven**
+---
+- Important to remember each module is effectively a Maven project
+	- Just happens to inherit from its parent module
+	- Much like the `effective` POM
+- Each module can have child modules
+	- Important for organization on larger projects
+	
+**Maven Reactor**
+---
+- Known simply as **The Reactor**
+- The Reactor is the what builds each module of the Maven project
+- The Reactor collects the modules to build
+- The Reactor will then run selected build lifecycle against each module
+- The Reactor will determine the build order of the modules
+- By default The Reactor will build modules sequentially : Optionally can use threads to build modules in parallel
+
+---
+**Reactor Build Order**
+
+Factors determining the build order used by Reactor:
+- **Project dependencies**: **modules used** by other modules in the project will get **built first**
+- **Plugin declaration**: i.e. if **module** is a **plugin** **used** by other **modules**
+- **Order** of modules declared in **modules section** of **POM**
+
+
+**Multi-Module Code Smells**
+---
+*to KEEP IN MIND* :
+- Try to use modules only when needed
+- Do not **over-use** modules , i.e. Multiple modules will slow down your build.
+---
+
+cases of **Code Smells** with **Modules**:
+- One class or interface in a module!
+- Many small modules which could be combined!
+- Thinking that someone might need, stick to YAGNI principle.
+
+
+**Maven BOM**
+---
+- BOM: **Bill of Material** : Manufacturing term meaning effectively a recipe of components required to produce a widget
+- In Maven terminology, a **BOM** has become to mean **dependencies declared** within the
+**dependencyManagement** section of the **POM**.
+- **Fully qualified dependencies** are listed under the **dependencyManagement section** of the POM
+- **Dependencies declared **under the **dependencies section** of the **POM inherit** from **dependencyManagement** (**version / packaging**)
+- Typically **used** to **standardized versions**.
+
+
+
+
+
+
+
+
