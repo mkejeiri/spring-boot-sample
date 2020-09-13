@@ -350,7 +350,7 @@ see example project using Maven with [Project Lombok](https://projectlombok.org/
 **MapStruct Maven**
 ---
 - MapStruct is an annotation based object mapper.
-- Works by you creating an `interface` for a `mapper`, annotation processing is used to create the implementation.
+- Works by creating an `interface` for a `mapper`, annotation processing is used to create the implementation.
 
 see example Maven project using [MapStruct](http://mapstruct.org/)
 
@@ -633,8 +633,101 @@ cases of **Code Smells** with **Modules**:
 - Typically **used** to **standardized versions**.
 
 
+**Maven Spring-boot**
+---
+**some Maven commands to be keep in mind**:
+- `mvn spring-boot:help`
+- `mvn spring-boot:run`
+- `mvn verify ` : verify run integration phase and run spring-boot app afterward.
+- `mvn clean spring-boot:run` : remove target folder and run spring-boot app
+- `mvn clean package spring-boot:run` : run clean, package and then run spring-boot app
+- `mvn spring-boot:build-image`
+- `mvn spring-boot:build-image -DskipTests`
+- `mvn spring-boot:build-info`
+- `mvn spring-boot:repackage`
+- `mvn spring-boot:run`
+- `mvn spring-boot:start`
+- `mvn spring-boot:stop`
 
 
+
+Within the spring-boot app, in order **debug and check out** some versions and other metadata info related to the deployed app, make sure that the `spring-boot-starter-actuator` is added to the project and change the the build `spring-boot-maven-plugin` in the **pom.xml** as follow:
+
+```
+...
+<properties>
+        <java.version>11</java.version>
+        <some.custom.prop>Watching</some.custom.prop>
+</properties>
+...
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-info-goal</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <java.version>${java.version}</java.version>
+                                <some.prop>${some.custom.prop}</some.prop>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-it</id>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-it</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+```
+go to [http://localhost:8080/actuator/info](http://localhost:8080/actuator/info) and you will receive :
+
+```
+{
+	"build": {
+		"some": {
+			"prop": "Watching"
+		},
+		"java": {
+			"version": "11"
+		},
+		"version": "0.0.1-SNAPSHOT",
+		"artifact": "demo",
+		"name": "demo",
+		"time": "2020-09-13T19:19:27.614Z",
+		"group": "com.example"
+	}
+}
+```
+
+to be able to add also **git info** to the **received json payload**, we need to add a plugin `git-commit-id-plugin` into the build like this :
+
+```
+  <build>
+  ....
+			<plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
+    </build>
+```
+
+and add the `management.info.git.mode=full` into `application.properties` file.
 
 
 
