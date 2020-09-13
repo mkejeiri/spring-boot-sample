@@ -327,4 +327,29 @@ mvn install
 mvn dependency:tree
 
 mvn help:effective-pom
+
+mvn package -DTestskip
+
+mvn clean dependency:copy-dependencies package
+
+
 ```
+see [Maven in 5 Minutes](https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)
+
+> when we run the package lifecycle maven create all sources in `target/generated-sources`, and then copies them to `target\classes`, and then zip them into a jar file in `target\status` (e.g. jaxb case).
+
+
+**Lombok Project**
+---
+Project Lombok is a `code generator` which uses `annotation processing` to enhance classes, we can generate `getters, setters, toString, etc` from annotations at compile time.
+
+> for intellij need to go: `Build, Execution, Deployment -> Compiler -> Annotation Processors` and then `Enable annotation processing` 
+
+see example project using Maven with [Project Lombok](https://projectlombok.org/)
+
+**MapStruct Maven**
+---
+- MapStruct is an annotation based object mapper.
+- Works by you creating an `interface` for a `mapper`, annotation processing is used to create the implementation.
+
+see example Maven project using [MapStruct](http://mapstruct.org/)
