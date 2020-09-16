@@ -651,7 +651,7 @@ cases of **Code Smells** with **Modules**:
 
 
 
-Within the spring-boot app, in order **debug and check out** some versions and other metadata info related to the deployed app, make sure that the `spring-boot-starter-actuator` is added to the project and change the the build `spring-boot-maven-plugin` in the **pom.xml** as follow:
+Within the spring-boot app, in order **debug and check out** some versions and other metadata info related to the deployed app, make sure that the `spring-boot-starter-actuator` is added to the project and change the the build `spring-boot-maven-plugin` in the **pom.xml** as follow:
 
 ```
 ...
@@ -729,6 +729,113 @@ to be able to add also **git info** to the **received json payload**, we need to
 
 and add the `management.info.git.mode=full` into `application.properties` file.
 
+---
 
 
 
+# Maven Repositories
+
+**Maven Repositories Search Order**
+---
+When **resolving an artifact**, **Maven** will:
+- **First**: Check in the local repository (aka cache) located under <user home>/.m2/repository/
+- **Next**: Maven Central
+- **Next**: any additional repositories configured
+
+Search order of **additional repositories**:
+
+- Typically not important
+- Is Alphabetical by repository id value
+
+**Repository Mirrors**
+----
+- **Mirrors** are used to override project defined repository values
+- **Mirrors** are configured in settings.xml : **Default location** is in `<user>/.m2 directory`
+- **A mirror** will override the URL of the repository
+- Can be used to improve **performance** by directing to **regional servers**
+- Or to redirect to **internal repository manager**
+- Values set in `settings.xml` will apply to all **Maven projects** executed on system
+
+
+**Defining Additional Remote Repositories**
+---
+Repositories can be defined in the `repositories` element of the **POM**, or in the repositories element in the `settings.xml` file :
+
+- **POM** definitions will be specific to the Maven project
+- `settings.xml` definitions are system wide
+
+**Repository Element**
+---
+- **id** : unique value required
+- **name** : human readable name
+- **url** : URL for repository
+- **layout** : legacy or default (Default is generally used)
+- **releases** : Repository Policy for handling downloading of releases
+- **snapshots** : Repository Policy for handling downloading of snapshots
+
+**Repository Policy**
+---
+- Used for **release** and **snapshot** elements of **Repository definitions**
+- **enabled** : `true/false`
+- **updatePolicy**: `always, daily (default), interval:XXX (xxx in minutes), never`
+- **checksumPolicy** : What to **do** if **verification** of **artifact** **fails**, values are : `ignore, fail, warn`
+
+**pom.xml**
+```
+...
+	<repositories>
+        <repository>
+            <id>redhat-ga</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven.oracle.com</id>
+            <name>oracle-maven-repo</name>
+            <url>https://maven.oracle.com</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+        </repository>
+    </repositories>
+...
+	<pluginRepositories>
+        <pluginRepository>
+            <id>maven.oracle.com</id>
+            <name>oracle-maven-repo</name>
+            <url>https://maven.oracle.com</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>	
+	
+...
+```
+
+**settings.xml** `pom->maven->create settings.xml`
+> created at `C:\Users\<CurentUser>\.m2\settings.xml`
+
+see[ Maven Mirror](https://maven.apache.org/guides/mini/guide-mirror-settings.html#:~:text=To%20configure%20a%20mirror%20of,are%20using%20a%20mirror%20of.) , [from google](https://www.deps.co/guides/public-maven-repositories/), [repo meta data](https://repo.maven.apache.org/maven2/.meta/repository-metadata.xml)
+
+> if we go `pom.xml maven->show effective pom`, we won't see the uk mirror there, because it's local to our user (**settings.xml** only used at IDEA and current user level!).
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <mirrors>
+        <mirror>
+            <id>uk</id>
+            <mirrorOf>central</mirrorOf>
+            <url>http://uk.maven.org/maven2/</url>
+        </mirror>
+    </mirrors>
+</settings>
+```
