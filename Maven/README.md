@@ -1615,6 +1615,192 @@ class JavaHelloWorldTest {
 
 > Depending if the **profile** `test` or `uat`, we will set ENV variable `HOST_VALUE` and then the `getHello()` will get the value and act accordingly. If none is activated, the  ENV variable `HOST_VALUE` will be `localhost`.
 
+# Maven Release Plugin Overview
+
+**Maven Release Plugin**
+----
+- The **Maven Release Plugin** can be used to release versions of your project.
+- **High level release** process:
+	1. `Version 1.0.0-SNAPSHOT`
+	2. `Version 1.0.0`
+	3. `Version 1.0.1-SNAPSHOT`
+	
+
+**Release Considerations**
+----
+- **Snapshots** are considered **development versions** and source changes are not closely tracked
+- **Releases** however, are **formal releases** of a **software project**.
+	- Source code should be tracked
+	- Auditors in some industries will require source code of a release to be tracked
+	- You should be able to **re-create** the **released artifact** from  **SCM**
+	- Best practice is to **tag SCM with release**, and definitively know what is in the `release`
+
+**Maven Release Plugin Goals**
+----
+
+**_1. Prepare Release_**
+
+- Check no **uncommitted changes**
+- Check no **snapshots**
+- Update to **release version**
+- Run **Tests**
+- `Tag` in **SCM**
+- Next **Snapshot version**
+- **Commit**
+
+**_2. Perform Release_**
+
+- Checkout of **SCM** with **SCM** `tag`
+- Run `release goals` : `default deploy` & `site deploy`
+- Remove **release files**
+- Checkout of `SCM master`
+
+
+**Release Rollback**
+----
+- Typically used if **errors** have **occurred** in `release:prepare` goal
+	- Will revert **POMs** back to `pre-release` state
+	- `SCM Tag` may be **removed**: **Tag removal** is not fully implemented (depends on **SCM**)
+- Will **not work** if **goal** `release:clean` has been `run`
+
+**Clean Release**
+----
+- Cleans up release files:
+	- removes `release.properties`
+	- removes any `backup POMs`
+- Normally removed with `release:perform`
+
+
+**Update POM Versions**
+----
+- Goal can be used to **update POM versions** in **multi-model** projects
+- Handy tool if **default release** process does not meet your **needs**:
+`mvn release:update-versions -DautoVersionSubmodules=true`
+> -DautoVersionSubmodules=true :  all submodule must match the parent module.
+
+
+# SCM Configuration
+
+**Maven SCM Plugin**
+----
+- **SCM**: *Software Configuration Management* or **Source Control Management**
+- Under the covers, the **Maven Release Plugin**is using the **Maven SCM Plugin** to interact with the project's **SCM**
+- The **Maven SCM Plugin** supports most **major SCMs**
+- The Maven **SCM Plugin** Supports: `Git`, `CVS`, `Subversion`, `TFS`, `Mercurial`, `Perforce`, and others
+- Exact **abilities** vary by **SCM**
+
+**SCM Configuration - Git/GitHub**
+----
+- The **SCM** is defined in the **SCM section** of the **POM**
+- The **'connection'** element defines the **read URL**
+- The **'developerConnection'** element defines the **write url**.
+- The **URL** is prefixed with **'scm:[scm-provider]:[SCM URL]'**
+- Example: `scm:git:git@github.com:mkejeir/spring-boot-sample.git`
+- The `tag` element defines the `tag` project is under (defaults to `HEAD`)
+- The `url` element defines the **public repository** `URL`.
+
+**Git Hub Authentication**
+----
+- Depends on how you cloned from GitHub: `HTTPS` or `SSH`
+- `HTTPS`: 
+	- Set property `project.scm.id`
+	- Setup server credentials in `settings.xml`
+- `SSH`: No configuration needed, **SSH credentials** will be used.
+
+**Example**
+----
+**pom.xml**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.example</groupId>
+	<artifactId>example-plugin</artifactId>
+	<version>1.4-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<junit.version>5.3.2</junit.version>
+		<project.scm.id>github</project.scm.id>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<scm>
+		<developerConnection>scm:git:https://github.com/mkejeiri/spring-boot-sample.git</developerConnection>
+		<url>https://github.com/mkejeiri/spring-boot-sample.git</url>
+		<tag>HEAD</tag>
+	</scm>
+	<build>
+		<extensions>
+			<extension>
+				<groupId>io.packagecloud.maven.wagon</groupId>
+				<artifactId>maven-packagecloud-wagon</artifactId>
+				<version>0.0.6</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+		</plugins>
+	</build>
+	<distributionManagement>
+		<repository>
+			<id>server.release</id>
+			<url>[url to release repo]</url>
+		</repository>
+		<snapshotRepository>
+			<id>server.snapshot</id>
+			<url>[url to snapshot repo]</url>
+		</snapshotRepository>
+	</distributionManagement>
+</project>
+```
+
+**settings.xml**
+
+```xml
+...
+<servers>
+        <server>
+            <id>github</id>        <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+        </server>
+        
+</servers>
+...
+```
+
+**Run**
+
+- `mvn clean release:prepare`: creates `release.properties` & `pom.xml.releasBackup` files.
+- optional : `mvn release:rollback`, it won't work if we run `mvn clean` after `prepare`, it will remove `release.properties` & `pom.xml.releasBackup` files created by `mvn release:prepare`. 
+- `mvn clean release:perfom`, will apply the release to the resulting of `prepare` files. 
+
+> often two errors could happens: `snapshot` versions still out there or **uncommitted changes** not yet committed. 
+
+> `mvn release:prepare -DdryRun=true`, it only dispalys changes in the output and doesn't apply the changes (i.e. a kind of a simulation), it will create the following files : `release.properties` & `pom.xml.releasBackup` & `pom.xml.next` & `pom.xml.tag`. we need to clean up : `mvn release:clean` 
 
 
 
