@@ -1286,3 +1286,335 @@ add to the **pom.xml**
 ```
 
 
+# Maven Build Profiles
+
+**Maven Build Profiles**
+----
+- **Maven Build Profiles** allow you to specify a set of build configuration values
+- Values you can specify are largely the same data elements found in the **POM**
+- Values set in **build profiles**:
+	- Can be in addition to what is in the project **POM**
+	- OR used to **override POM values**
+- **More** than **one profile** can be set to **active at time**
+- **Caution**: No **priority** is available for **multiple active profiles**: Duplicate **Property resolution** is **random**
+
+**Why Use Build Profiles?**
+----
+- **Build Profiles** are a very **powerful feature** which allows you to shape the **behavior** of your **build**
+- **Build Behavior** can be **changed**:
+	- Based on your **desired outcome** of the build
+	- Automatically based on the **run time environment**
+	- Automatically to adopt to different **operating systems**
+	- To optionally activate **specific plugins**
+	- To provide **alternative** build time **configuration values**
+
+
+
+**Declaring Build Profiles**
+----
+- Per **Project**
+	- Defined in **pom.xml**
+	- **Command Line** : `mvn package -S <path to settings file>`
+- Per **User** : Defined in `<user home>/.m2/settings.xml`
+- **Global** (e.g. Jenkins server): Defined in `<Maven Home>/conf/settings.xml`
+- **Profile Descriptor** :
+	- Defined in **profiles.xml**
+	- **Not Supported** by **Maven 3.0** (Released in 2010)
+
+**Which Declaration Method to Use?**
+----
+- Use **Project POM** when:
+	- Your **build** needs to be **portable** to other computers (ie CI server, other developers)
+	- When **others** may or may not need **build features**
+- Use **Settings.xml** when:
+	- You want the **profile** available to **many projects**
+	- **Frequently** used for **configuration** of **repository managers**
+	- Protection of **secrets**
+	- **Environment Config** values
+
+**Combo of Declaration Methods?**
+----
+Can you define profile values in both POM and settings.xml for the same profile?
+- Short answer is **yes**. . .
+- **Not recommended**
+- Considering using multiple **profile id’s**
+
+
+**Activating Build Profiles**
+----
+- In the **Profile configuration** under **activation attribute**:
+	- setting `activeByDefault` property to `true`
+	- **default activation** for `OS`, `JDK` versions
+	- existence of **system properties**
+	- **specific** values of **system properties**
+	- **missing files** (i.e. build artifact not in target dir)
+- Command line: `mvn package -P <profile-1>,<profile-2>`
+- In `settings.xml` file : `activeProfiles` section
+
+**Deactivating Profiles**
+----
+
+Profiles can be deactivated from the command line:
+- `mvn package -P !<profile-1>,!<profile-2>`
+- `mvn package -P -<profile-1>,-<profile-2>`
+
+
+**POM Elements in Profiles**
+----
+- `repositories`
+- `pluginRespositories`
+- `dependencies`
+- `plugins`
+- `properties`
+- `modules`
+- `reporting`
+- `dependencyManagement`
+- `distributionManagement`
+- `Build` **Element**: (Only)
+	- `defaultGoal`
+	- `resources`
+	- `testResources`
+	- `finalName`
+
+**View Active Profiles**
+----
+- Command: `mvn help:active-profiles`
+- Note should be used with relevant **CLI options**
+	- `mvn help:active-profiles -P <profile-1>` : would show profile-1 active
+
+
+
+**Example of profiles in pom.xml, settings.xml (packagecloud+Nexus)**
+----
+**pom.xml**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.example</groupId>
+	<artifactId>sandbox</artifactId>
+	<version>1.1-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>11</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
+	<build>
+		<!-- We CANNOT include extension inside profiles, this will be left here!-->
+		<extensions>
+			<extension>
+				<groupId>io.packagecloud.maven.wagon</groupId>
+				<artifactId>maven-packagecloud-wagon</artifactId>
+				<version>0.0.6</version>
+			</extension>
+		</extensions>
+	</build>
+	<!--			WARNING 
+		here we have 2 profiles without a default active one (commented out below), 
+		the active one get randomly selected, but it doesn't give an error.
+	-->
+	<profiles>
+		<profile>
+			<id>packagecloud</id>
+			<distributionManagement>
+				<repository>
+					<id>packagecloud.release</id>
+					<url>packagecloud+https://packagecloud.io/springframeworkguru/release</url>
+				</repository>
+				<snapshotRepository>
+					<id>packagecloud.snapshot</id>
+					<url>packagecloud+https://packagecloud.io/springframeworkguru/snapshot</url>
+				</snapshotRepository>
+			</distributionManagement>
+			<!--
+			<activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+			-->
+		</profile>
+		<profile>
+			<id>nexus_distro</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>nexus-snapshot</id>
+					<url>http://localhost:8081/repository/nexus-snapshot/</url>
+				</snapshotRepository>
+				<repository>
+					<id>nexus-release</id>
+					<url>http://localhost:8081/repository/nexus-release/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+</project>
+
+```
+**settings.xml**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<servers>
+		<server>
+			<id>packagecloud.snapshot</id>			
+			<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+		</server>
+			<server>
+			<id>nexus-snapshot</id>
+			<username>admin</username>
+			<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+		</server>
+		<server>
+			<id>nexus-snapshot</id>
+			<username>admin</username>
+			<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+		</server>
+	</servers>
+	<mirrors>
+		<mirror>
+			<!--it will think that maven central repo but it will use the group instead-->
+			<id>central</id>
+			<name>central</name>
+			<url>http://localhost:8081/repository/nexus-group/</url>
+			<!-- '*' stands for all repositories within the group-->
+			<mirrorOf>*</mirrorOf>
+		</mirror>
+	</mirrors>
+	<profiles>
+		<profile>
+			<id>jboss</id>
+			<repositories>
+				<repository>
+					<id>redhat-ga</id>
+					<url>https://maven.repository.redhat.com/ga/</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+	
+	<activeProfiles>
+		<activeProfile>jboss</activeProfile>
+	</activeProfiles>
+</settings>
+```
+
+**Example of Maven Profile Command Line Usage on the previous examples**
+----
+
+- view all active profile : `mvn help:active-profiles`
+- view `packagecloud`  profile : `mvn help:active-profiles -Ppackagecloud`
+- deploy with packagecloud profile : `mvn clean deploy  -Ppackagecloud`
+- deploy with nexus_distro profile : `mvn clean deploy  -Pnexus_distro`
+- deactive an active profile : `mvn package -P \!packagecloud help:active-profiles` (need to **ESCAPE** '!' )
+- deactive an active profile : `mvn package -P '!packagecloud' help:active-profiles ` (need a quote) 
+- deactive an active profile : `mvn package -P  -packagecloud help:active-profiles ` 
+- desactivate `packagecloud` and deploy with `nexus_distro` profile : `mvn clean deploy  -P \!packagecloud,nexus_distro`
+- desactivate `packagecloud` and make `nexus_distro` profile active and show active profiles `mvn -P \!packagecloud,nexus_distro help:active-profiles` 
+
+
+**Passing a Java environment variables to a test**
+----
+
+In the example next we will dynamically **control** the **HOST_VALUE environment variable** through the active **build profile**. 
+
+**JavaHelloWorldTest.java**
+```java
+package com.example;
+
+import org.junit.jupiter.api.Test;
+
+class JavaHelloWorldTest {
+
+    @Test
+    void getHello() {
+
+        System.out.println("#####################");
+        System.out.println(System.getenv("HOST_VALUE"));
+    }
+}
+```
+
+**pom.xml**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>testing-environment-variable</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <junit.version>5.3.2</junit.version>
+        <TESTED_HOST>localhost</TESTED_HOST>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <environmentVariables>
+                        <HOST_VALUE>${TESTED_HOST}</HOST_VALUE>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+ <!-- 
+ we dynamically control the HOST_VALUE through the active build profile 
+ by overriding the TESTED_HOST property!
+ -->
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <TESTED_HOST>test.example.com</TESTED_HOST>
+            </properties>
+        </profile>
+        <profile>
+            <id>uat</id>
+            <properties>
+                <TESTED_HOST>uat.example.com</TESTED_HOST>
+            </properties>
+        </profile>
+    </profiles>
+</project>
+```
+
+> Depending if the **profile** `test` or `uat`, we will set ENV variable `HOST_VALUE` and then the `getHello()` will get the value and act accordingly. If none is activated, the  ENV variable `HOST_VALUE` will be `localhost`.
+
+
+
+
