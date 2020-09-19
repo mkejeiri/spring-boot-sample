@@ -1,6 +1,6 @@
 # javac, java, ClassPath MEMO
 
-```
+```java
 package mp;
 
 public class HelloWorld {
@@ -12,7 +12,7 @@ public class HelloWorld {
 }
 ```
 
-```
+```sh
 #package mp/*.java files, mp should be also a folder  because 
 #it's a class package (mp = my package)
 
@@ -42,12 +42,12 @@ java -cp test.jar  mp.HelloWorld
  ```
 
 ###### Resolve all, prepare to go offline
- ``` 
+ ```
  mvn dependency:go-offline
  ```
 
 ###### Clear artifacts from local repository
- ``` 
+ ```
  mvn dependency:purge-local-repository
  ```
 
@@ -168,7 +168,7 @@ Example : `mvn archetype:generate -DarchetypeArtifactId=maven-archetype-archetyp
 
 > for **initialize** phase we explicitly add the clean goal, thus all phase will run the goal clean since they have the initialize phase
 
-```
+```xml 
 <build>
 	<plugins>
 		<plugin>
@@ -233,7 +233,7 @@ Maven Surefire Plugin: Build Lifecycle - DEFAULT
   see ["Creating an Executable JAR File"](https://maven.apache.org/shared/maven-archiver/examples/classpath.html) 
     
  **pom.xml**
- ```
+```xml 
  ...
   <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
@@ -278,7 +278,7 @@ It has **7 goals**
  
 > Maven environment (maven 3.6.0) brings always [maven-site-plugin 3.3](https://stackoverflow.com/questions/51103120/why-does-maven-site-plugin-always-use-version-3-3), to fix this see the code snippet below : 
 
-```
+```xml 
  <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-site-plugin</artifactId>
@@ -287,7 +287,7 @@ It has **7 goals**
 ```
 see https://maven.apache.org/ref/3.6.3/
 and https://maven.apache.org/ref/3.6.3/maven-core/lifecycles.html in the **site Lifecycle** code snippet they bind to maven-site-plugin:3.3 instead of 3.7.1!
-```
+```xml 
 <phases>
   <phase>pre-site</phase>
   <phase>site</phase>
@@ -371,7 +371,7 @@ to compile Groovy with Java.
 [see a full example](https://github.com/springframeworkguru/mb2g-alt-jvm/tree/groovy) 
 
 **pom.xml** with an example of adding an extra `pluginRepositories` to groovy (`https://dl.bintray.com/groovy/maven`) 
-```
+```xml 
  <build>
         <plugins>
             <plugin>
@@ -426,7 +426,7 @@ We need to add kotlin and maven plugin (i.e. to disable them!), see pom.xml next
 **pom.xml**
 [see a full example](https://github.com/springframeworkguru/mb2g-alt-jvm/tree/kotlin)
 
-```
+```xml 
 <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -512,7 +512,7 @@ for Scala with Maven, please see documentation on [SCALA WITH MAVEN
 **pom.xml**
 [see a full example](https://github.com/springframeworkguru/mb2g-alt-jvm/tree/scala)
 > Enable maven Scala plugin and disable maven java plugin!
-```
+```xml 
 <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -653,7 +653,7 @@ cases of **Code Smells** with **Modules**:
 
 Within the spring-boot app, in order **debug and check out** some versions and other metadata info related to the deployed app, make sure that the `spring-boot-starter-actuator` is added to the project and change the the build `spring-boot-maven-plugin` in the **pom.xml** as follow:
 
-```
+```xml 
 ...
 <properties>
         <java.version>11</java.version>
@@ -697,7 +697,7 @@ Within the spring-boot app, in order **debug and check out** some versions and o
 ```
 go to [http://localhost:8080/actuator/info](http://localhost:8080/actuator/info) and you will receive :
 
-```
+```json
 {
 	"build": {
 		"some": {
@@ -781,7 +781,7 @@ Repositories can be defined in the `repositories` element of the **POM**, or in 
 - **checksumPolicy** : What to **do** if **verification** of **artifact** **fails**, values are : `ignore, fail, warn`
 
 **pom.xml**
-```
+```xml 
 ...
 	<repositories>
         <repository>
@@ -825,7 +825,7 @@ Repositories can be defined in the `repositories` element of the **POM**, or in 
 see[ Maven Mirror](https://maven.apache.org/guides/mini/guide-mirror-settings.html#:~:text=To%20configure%20a%20mirror%20of,are%20using%20a%20mirror%20of.) , [from google](https://www.deps.co/guides/public-maven-repositories/), [repo meta data](https://repo.maven.apache.org/maven2/.meta/repository-metadata.xml)
 
 > if we go `pom.xml maven->show effective pom`, we won't see the uk mirror there, because it's local to our user (**settings.xml** only used at IDEA and current user level!).
-```
+```xml 
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -839,3 +839,450 @@ see[ Maven Mirror](https://maven.apache.org/guides/mini/guide-mirror-settings.ht
     </mirrors>
 </settings>
 ```
+
+# Common Public Maven Repositories
+
+Maven Central
+----
+- Established in 2002, considered the `grand-daddy` of Maven repositories
+- Default repository used by Apache Maven, sbt, and others.
+- Over 3.3M indexed jars
+- URL: http://central.maven.org/maven2/
+
+
+Sonatype : 
+----
+- Sonatype : Staging Repository used to publish artifacts to Maven Central
+- Hosted by company sonatype
+- Typically not used directly
+- 2M+ Indexed JARs
+- URL: https://oss.sonatype.org/content/repositories/releases/ : this repo to push to and behind the scenes artifacts get pushed to maven central.
+> Sonatype company :  those are the people who wrote apache Maven and they host maven central.
+
+
+JCenter
+----
+- Has Maven Central Artifacts and more
+- Default for **_Android Studio_** and **_Gradle_**
+- Has support for HTTPS
+- Uses different CDN than Maven Central. May be more performant in different countries
+- provides a **geo-location** of location out of the box.
+- URL: https://jcenter.bintray.com/
+
+
+JBoss
+----
+- Artifacts for the JBoss community
+- Has repositories for releases, third party releases, and snapshots
+- URL: https://repository.jboss.org/nexus/content/repositories/releases/
+
+**adding Jboss repo to the project pom**
+```xml 
+...
+	<dependencies>
+        <dependency>
+            <groupId>org.jboss.ejb3</groupId>
+            <artifactId>jboss-ejb3-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>redhat-ga</id>
+            <url>https://maven.repository.redhat.com/ga/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+...
+```
+
+> The settings.xml config won't appear in effective pom, this settings is linked to the machine `<user>` profile, but the above JBoss repo will be added.
+
+Atlassian
+----
+- Hosted by Atlassian (Jira, Confluence, etc)
+- Artifacts for Atlassian Plugin Developers
+- URL: https://packages.atlassian.com/maven/public
+- Snapshot URL: https://packages.atlassian.com/maven/public-snapshot
+
+Oracle
+----
+- Hosted by Oracle Corporation
+- Provides jars for Oracle products, and Oracle JDBC jars.
+- Requires registration
+- URL: https://maven.oracle.com/
+
+
+Spring Framework
+----
+- Hosted by Pivotal, company supporting the Spring Framework
+- Provides Releases, Milestone Releases, and Snapshots
+- Helpful for developing against leading edge versions of Spring Framework Components
+- Releases are also published to Maven Central
+- URL: https://repo.spring.io
+
+
+# [Maven Settings files](https://maven.apache.org/settings.html)
+
+**User Settings** : kept in `<user home>/.m2/settings.xml`
+- Can be overridden with command line parameter `-s <path/filename>`
+- Common to override in CI builds
+
+**Global Settings** : Kept in Maven home `/conf/settings.xml`
+- Applies to all users using Maven from that directory
+- Can be overridden with command line parameter `-gs <path/filename>`
+- Rarely used, user settings typically used instead
+> see gobal-settings.xml files
+
+
+
+**Settings Elements**
+---
+- **localRepository**: Allows you to override the location of the local Maven repository
+- **interactiveMode**: Allows you to set `interactive/batch` mode. `Defaults` to interactive.
+- **usePluginRegistry**: `Maven 2.0`, no longer used in `Maven 3.0`
+- **offline** : defaults to `false`, if true Maven will not try to connect to `remote repositories`
+- **pluginGroups** : List `plugin group ids`, to allow abbreviated `plugin goals` (i.e. kind of shortcut)
+- **servers** : element allows you to set `user credentials` for servers which Maven connects to
+- **mirrors**: Allows you to `configure mirrors` for repositories
+- **proxies** : Define network `proxy information`
+- **profiles** : Define `build profiles`
+- **activeProfiles** : define `active build` profiles
+
+
+**Example of active profile**
+- step 1 : go to  `<user home>/.m2/settings.xml`
+- step 2 : add `<Profiles>`
+- step 3 : add `<activeProfiles>`
+- step 4 : remove the repository from the `pom.xml`
+
+```xml 
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <profiles>
+        <profile>
+            <id>jboos</id>
+            <repositories>
+                <repository>
+                    <id>redhat-ga</id>
+                    <url>https://maven.repository.redhat.com/ga/</url>
+                    <releases>
+                        <enabled>false</enabled>
+                        <updatePolicy>always</updatePolicy>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </snapshots>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>jboos</activeProfiles>
+</settings>
+```
+
+**Installing Manual Jar locally - Oracle License**
+---
+Oracle required licences for its packages, e.g. `ojdbc7` we need to go to https://www.oracle.com/database/technologies/jdbc-drivers-12c-downloads.html and download `ojdbc7` in order to agree to the License (not maven central available!) and install the JAR manually into our local Maven repository (`<user home>/.m2/settings.xml`)
+
+
+`mvn install:install-file -Dfile=<Path>/ojdbc7.jar -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.1 -Dpackaging=jar`
+
+# Overview of Using Oracle Maven Repository
+
+**Oracle Maven Repository**
+---
+- **Oracle** hosts a `Maven repository` for **Oracle** related `artifacts`
+- The Oracle `Maven repository` **requires** `authentication`
+- This will be used as an example of how to configure `server  authentication`, the same can be applied to other `3rd party servers` requiring `authentication`.
+-  an `Oracle account` is required 
+
+
+**Configuration Overview**
+----
+[see Oracle Maven Repository configuration ](https://docs.oracle.com/middleware/1213/core/MAVEN/config_maven_repo.htm#MAVEN9012) and also [Get Oracle JDBC drivers and UCP from Oracle Maven Repository (without IDEs)](https://blogs.oracle.com/dev2dev/get-oracle-jdbc-drivers-and-ucp-from-oracle-maven-repository-without-ides)
+
+Set **Maven Master Password** : It will be used by Maven to decrypt values that we store in a specific file, [see Maven password encryption](https://maven.apache.org/guides/mini/guide-encryption.html).
+- **Encrypt** your `Oracle account password` and store it 
+- **Configure security settings** for Oracle in `settings.xml`
+- **Maven Wagon** : Oracle documentation refers to using `Maven Wagon 2.8` or higher
+- Steps are **not required** with `Maven 3.2.5` or higher
+
+
+>> **Maven Wagon** handles communication with external servers
+
+
+
+Pratical example with oracle repository
+---
+1- Create a master password `mvn --encrypt-master-password mypass` : `{NN4j9eIK0fEHBdOmy2GHypgKwX7OJhN+G8mVtITDtw8=}`
+
+2- copy the encrypted master password into the `<user home>/.m2/settings-security.xml`
+```xml 
+<settingsSecurity>
+  <master>{jSMOWnoPFgsHVpMvz5VrIt5kRbzGpI8u+9EF1iFQyJQ=}</master>
+</settingsSecurity>
+```
+
+3- Encrypt server passwords : `mvn --encrypt-password [OTN PASSWORD]`
+
+`{COQLCE6DU6GtcS5P=}`
+
+	
+
+**settings.xml**
+
+```xml 
+...
+<server>
+    <id>maven.oracle.com</id>
+    <username>[enter ur email used to log in to Oracle Technology Network (OTN).]</username>
+    <password>[enter ur enctypted password here {COQLCE6DU6GtcS5P=}]</password>
+    <configuration>
+      <basicAuthScope>
+        <host>ANY</host>
+        <port>ANY</port>
+        <realm>OAM 11g</realm>
+      </basicAuthScope>
+      <httpConfiguration>
+        <all>
+          <params>
+            <property>
+              <name>http.protocol.allow-circular-redirects</name>
+              <value>%b,true</value>
+            </property>
+          </params>
+        </all>
+      </httpConfiguration>
+    </configuration>
+  </server>
+...
+```
+
+**pom.xml**
+
+```xml 
+...
+<dependencies>
+        <dependency>
+            <groupId>com.oracle.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>18.3.0.0</version>
+        </dependency>
+    </dependencies>
+<!-- remove this part if we aren't using oracle repo-->
+    <repositories>
+        <repository>
+		<!-- this is the server id in settings.xml file above and how it relates to each others-->
+            <id>maven.oracle.com</id>
+            <name>oracle-maven-repo</name>
+            <url>https://maven.oracle.com</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven.oracle.com</id>
+            <name>oracle-maven-repo</name>
+            <url>https://maven.oracle.com</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+...
+```
+
+**Nexus Repository Manager Overview**
+----
+Official name is **Nexus Repository OSS** (aka **Nexus**):
+
+- Open Source application written primarily in Java, by **Sonatype**
+- Used by 10 million developers around the world
+- Nexus is free to use, and commonly used by companies for **internal Maven artifacts**
+- Nexus Repository Pro is a commercially supported version of **Nexus Repository OSS**
+
+**Sonatype** started as core contributors to Apache Maven and they host **Maven Central**
+- Maven central is the default repository used by Maven to locate open source artifacts
+
+
+**Nexus Features**
+----
+- **Nexus** supports far more than just **Java artifacts**:  Additional formats: `npm`, `NuGet`, `RubyGems`, `Docker`, `P2`, `OBR`, `APT`, `Yum`
+- Nexus **features** for **Maven** : 
+	- Proxy for Maven Repositories : Popular with companies for performance, audit, and compliance aspects
+	- Publishing target for internal Maven artifacts 
+	- User Credentials 
+
+**Maven Repository Format**
+----
+- **Maven 2** :  Most popular format, used by all current versions of `Maven`, `Apache Ivy`, `Gradle`, `sbt`, `Eclipse Aether`, and `Leiningen`. (also, the format used by `Maven Central`)
+- **Version Policy**:
+	- **Release** : Artifacts are expected to be release versions (ie not changing)
+	- **Snapshot** : Artifacts are development releases, and are expected to be changing
+	- **Mixed** : Combination of Release and Snapshot
+	
+
+**Repository Layout Policy**
+----
+
+- **Layout policy** refers to the **directory structure** and **naming conventions**.
+- Some **build tools** use **non-traditional layouts**
+- **Layout Policy**
+	- `Permissive` : Allows violations. Enable if build tools (sbt) require it.
+	- `Strict` : Require Repository to follow **Apache Maven Conventions**, this is the **recommended setting** to use with **Apache Maven**.
+
+**Proxying Maven Repositories**
+-----
+- **Nexus** has the ability to **proxy** other **Maven Repositories**.
+- Commonly used by companies to setup an **internal repository** which **mirrors** **external repositories**
+- Can be faster if corporate network is more performant than internet access
+- May be needed for compliance in some industries requiring **auditing or approval of 3rd party**
+libraries
+- May also be helpful if repository **requires registration**
+
+**Proxying Repositories**
+----
+- When **Nexus** receives a **request** for an `artifact`, it will first check its own **internal file structure** for the `artifact`.
+- If not found, `artifact` is fetched from **remote** and **cached** to **Nexus**
+- **Releases** are checked once, `snapshots` are monitored for **updates Maven Local**
+
+![pic](images/ProxyingRepositories.jpg)
+
+**Grouping Repositories**
+----
+**Nexus** can group **repositories** to make many look like **one**.
+**Nexus** can group **repositories** to make many look like **one**.
+
+**Nexus Practices - adding repositories release and snapshot**
+----
+- run a docker container of **nexus** : `docker run -d -p 8081:8081 --name nexus sonatype/nexus3`
+- navigate to [http://localhost:8081/](http://localhost:8081/) and use user `admin`, `exec` into the container (e.g. `docker exec -it cffc2b25eb5c bash`) and run `cat /nexus-data/admin.password`, use the temporary password to connect for 1st time (e.g. `bd1e6f6e-df74-4583-abe3-8043be1ff3c5`), you will be requested to change the password!
+- to create a **repository**, Go to **Nexus dashboard**
+![pic](images/Nexus-dashboard.jpg), choose maven hosted (either release or snapshot)
+	- create `nexus-snapshot` repository
+	- create `nexus-release` repository
+	
+- Configure the project `pom.xml` to include `nexus-snapshot` & `nexus-release` those for deployment and distribution 
+```xml
+<!-- fetching artifacts -->
+ <repositories>
+        <repository>
+            <id>nexus-snapshot</id>
+            <url>http://localhost:8081/repository/nexus-snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>nexus-release</id>
+            <url>http://localhost:8081/repository/nexus-release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+	
+	<!-- artifacts publication-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <url>http://localhost:8081/repository/nexus-snapshot/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-snapshot</id>
+            <url>http://localhost:8081/repository/nexus-release/</url>
+        </repository>
+    </distributionManagement>
+```	
+
+- configure `<user home>/.m2/settings.xml` servers (*encypt admin password of nexus as show before*):
+ 
+```xml	
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>nexus-snapshot</id>
+            <username>admin</username>
+            <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+        </server>
+        <server>
+            <id>nexus-snapshot</id>
+            <username>admin</username>
+            <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+        </server>
+    </servers>
+</settings>
+```
+
+**Nexus Practices - adding group**
+----
+
+> **group** will includes 3 repositories `maven-central`, `nexus-snapshot` and `nexus-release`.
+
+-  we need to remove all those repositories from `pom.xml` (i.e. `<repositories> ... </repositories>` and we keep `<distributionManagement>...</distributionManagement>`)
+
+- configure `<user home>/.m2/settings.xml` to add mirror
+
+```xml	
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>nexus-snapshot</id>
+            <username>admin</username>
+            <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+        </server>
+        <server>
+            <id>nexus-snapshot</id>
+            <username>admin</username>
+            <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+        </server>
+    </servers>
+    <mirrors>
+        <mirror>
+            <!--it will think that maven central repo but it will use the group instead-->
+            <id>central</id>
+            <name>central</name>
+            <url>http://localhost:8081/repository/nexus-group/</url>
+            <!-- '*' stands for all repositories within the group-->
+            <mirrorOf>*</mirrorOf>
+        </mirror>
+    </mirrors>
+</settings>
+```
+
+add to the **pom.xml**
+```xml
+...	
+<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <version>1.4.198</version>
+    <scope>test</scope>
+</dependency>
+...
+```
+
+
