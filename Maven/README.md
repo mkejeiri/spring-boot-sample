@@ -931,7 +931,7 @@ Spring Framework
 - Can be overridden with command line parameter `-s <path/filename>`
 - Common to override in CI builds
 
-**Global Settings** : Kept in Maven home `/conf/settings.xml`
+**Global Settings** : Kept in Maven home `<Maven Home>/conf/settings.xml`
 - Applies to all users using Maven from that directory
 - Can be overridden with command line parameter `-gs <path/filename>`
 - Rarely used, user settings typically used instead
@@ -1022,7 +1022,7 @@ Set **Maven Master Password** : It will be used by Maven to decrypt values that 
 
 
 
-Pratical example with oracle repository
+Practical example with oracle repository
 ---
 1- Create a master password `mvn --encrypt-master-password mypass` : `{NN4j9eIK0fEHBdOmy2GHypgKwX7OJhN+G8mVtITDtw8=}`
 
@@ -1175,8 +1175,9 @@ libraries
 - navigate to [http://localhost:8081/](http://localhost:8081/) and use user `admin`, `exec` into the container (e.g. `docker exec -it cffc2b25eb5c bash`) and run `cat /nexus-data/admin.password`, use the temporary password to connect for 1st time (e.g. `bd1e6f6e-df74-4583-abe3-8043be1ff3c5`), you will be requested to change the password!
 - to create a **repository**, Go to **Nexus dashboard**
 ![pic](images/Nexus-dashboard.jpg), choose maven hosted (either release or snapshot)
-	- create `nexus-snapshot` repository
-	- create `nexus-release` repository
+	- create `nexus-snapshot` **repository**, with `<url>http://localhost:8081/repository/nexus-snapshot/</url>`
+	- create `nexus-release` **repository**, with `<url>http://localhost:8081/repository/nexus-release/</url>`
+	- further we have to create also `nexus-group` **group**, with `<url>http://localhost:8081/repository/nexus-group/</url>`
 	
 - Configure the project `pom.xml` to include `nexus-snapshot` & `nexus-release` those for deployment and distribution 
 ```xml
@@ -1205,7 +1206,7 @@ libraries
             <url>http://localhost:8081/repository/nexus-snapshot/</url>
         </snapshotRepository>
         <repository>
-            <id>nexus-snapshot</id>
+            <id>nexus-release</id>
             <url>http://localhost:8081/repository/nexus-release/</url>
         </repository>
     </distributionManagement>
@@ -1225,7 +1226,7 @@ libraries
             <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
         </server>
         <server>
-            <id>nexus-snapshot</id>
+            <id>nexus-release</id>
             <username>admin</username>
             <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
         </server>
@@ -1254,7 +1255,7 @@ libraries
             <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
         </server>
         <server>
-            <id>nexus-snapshot</id>
+            <id>nexus-release</id>
             <username>admin</username>
             <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
         </server>
@@ -1468,7 +1469,7 @@ Profiles can be deactivated from the command line:
 			<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
 		</server>
 		<server>
-			<id>nexus-snapshot</id>
+			<id>nexus-release</id>
 			<username>admin</username>
 			<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
 		</server>
@@ -1630,8 +1631,8 @@ class JavaHelloWorldTest {
 ----
 - **Snapshots** are considered **development versions** and source changes are not closely tracked
 - **Releases** however, are **formal releases** of a **software project**.
-	- Source code should be tracked
-	- Auditors in some industries will require source code of a release to be tracked
+	- **ource code** should be **tracked**
+	- **Auditors** in some industries will require **source code** of a **release** to be **tracked**
 	- You should be able to **re-create** the **released artifact** from  **SCM**
 	- Best practice is to **tag SCM with release**, and definitively know what is in the `release`
 
@@ -1684,7 +1685,7 @@ class JavaHelloWorldTest {
 **Maven SCM Plugin**
 ----
 - **SCM**: *Software Configuration Management* or **Source Control Management**
-- Under the covers, the **Maven Release Plugin**is using the **Maven SCM Plugin** to interact with the project's **SCM**
+- Under the covers, the **Maven Release Plugin** is using the **Maven SCM Plugin** to interact with the project's **SCM**
 - The **Maven SCM Plugin** supports most **major SCMs**
 - The Maven **SCM Plugin** Supports: `Git`, `CVS`, `Subversion`, `TFS`, `Mercurial`, `Perforce`, and others
 - Exact **abilities** vary by **SCM**
@@ -1784,10 +1785,10 @@ class JavaHelloWorldTest {
 ```xml
 ...
 <servers>
-        <server>
-            <id>github</id>        <password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
-        </server>
-        
+	<server>
+		<id>github</id>
+		<password>{OwF5ll+BH4oHMWUsrt8g4I04TuyfLDkYk/rLWol+DPg=}</password>
+	</server>
 </servers>
 ...
 ```
